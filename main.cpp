@@ -46,6 +46,16 @@ int main()
         component.DisplayValues();
     }
 
+    std::cout << "\n\n\n";
+
+    format = file.ReadFormat("format.txt");
+    std::swap(format.column[0], format.column[1]);
+    file.WriteFormat(format, "new format.txt");
+
+    entry[0].column[1] = "999";
+    entry[1].column[0] = "Corrupted_File";
+    file.WriteData(entry, "new data.txt");
+
 
 
     std::cout << "Press any key to end the program.";

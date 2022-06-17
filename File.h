@@ -12,11 +12,17 @@ struct File
 
     Entry
         ReadFormat(),
-        ReadFormat(std::string directory);
+        ReadFormat(const std::string directory);
 
     std::vector <Entry>
         ReadData(const Entry &format),
-        ReadData(const Entry &format, std::string directory);
+        ReadData(const Entry &format, const std::string directory);
+
+    bool
+        WriteFormat(const Entry &format) const,
+        WriteFormat(const Entry &format, const std::string directory),
+        WriteData(const std::vector <Entry> &entry) const,
+        WriteData(const std::vector <Entry> &entry, const std::string directory);
 
 
 
@@ -77,7 +83,7 @@ Entry File::ReadFormat()
     return format;
 }
 
-Entry File::ReadFormat(std::string directory)
+Entry File::ReadFormat(const std::string directory)
 {
     this->formatDirectory = directory;
 
@@ -124,7 +130,7 @@ std::vector <Entry> File::ReadData(const Entry &format)
     {
         MessageBox(NULL,
                    (std::string("In method \"std::vector <Entry> File::ReadData(const Entry &format)\":\n\n"
-                                "File ") + this->formatDirectory + " could not be opened.").c_str(),
+                                "File ") + this->dataDirectory + " could not be opened.").c_str(),
                    "Error",
                    MB_OK);
     }
@@ -132,11 +138,90 @@ std::vector <Entry> File::ReadData(const Entry &format)
     return entry;
 }
 
-std::vector <Entry> File::ReadData(const Entry &format, std::string directory)
+std::vector <Entry> File::ReadData(const Entry &format, const std::string directory)
 {
     this->dataDirectory = directory;
 
     return this->ReadData(format);
+}
+
+bool File::WriteFormat(const Entry &format) const
+{
+    std::fstream
+        formatFile;
+
+    formatFile.open(this->formatDirectory, std::ios_base::ios_base::out);
+
+    if (formatFile.is_open())
+    {
+        for (auto component : format.column)
+        {
+            formatFile << component + ' ';
+        }
+
+        formatFile.close();
+
+        return true;
+    }
+    else
+    {
+        MessageBox(NULL,
+                   (std::string("In method \"bool File::WriteFormat(const Entry &format) const\":\n\n"
+                                "File ") + this->formatDirectory + " could not be opened.").c_str(),
+                   "Error",
+                   MB_OK);
+    }
+
+    return false;
+}
+
+bool File::WriteFormat(const Entry &format, const std::string directory)
+{
+    this->formatDirectory = directory;
+
+    return this->WriteFormat(format);
+}
+
+bool File::WriteData(const std::vector <Entry> &entry) const
+{
+    std::fstream
+        dataFile;
+
+    dataFile.open(this->dataDirectory, std::ios_base::ios_base::out);
+
+    if (dataFile.is_open())
+    {
+        for (auto line : entry)
+        {
+            for (auto column : line.column)
+            {
+                dataFile << column << ' ';
+            }
+
+            dataFile << '\n';
+        }
+
+        dataFile.close();
+
+        return true;
+    }
+    else
+    {
+        MessageBox(NULL,
+                   (std::string("In method \"bool File::WriteData(const std::vector <Entry> &entry) const\":\n\n"
+                                "File ") + this->dataDirectory + " could not be opened.").c_str(),
+                   "Error",
+                   MB_OK);
+    }
+
+    return false;
+}
+
+bool File::WriteData(const std::vector <Entry> &entry, const std::string directory)
+{
+    this->dataDirectory = directory;
+
+    return this->WriteData(entry);
 }
 
 
