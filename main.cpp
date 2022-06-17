@@ -37,6 +37,15 @@ int main()
     format = file.ReadFormat();
     format.DisplayValues();
 
+    std::cout << "\n\n\n";
+
+    entry = file.ReadData(format, "data2.txt");
+
+    for (auto component : entry)
+    {
+        component.DisplayValues();
+    }
+
 
 
     std::cout << "Press any key to end the program.";

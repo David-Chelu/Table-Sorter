@@ -38,7 +38,7 @@ void Entry::DisplayValues()
         std::cout << component + "; ";
     }
 
-    std::cout << "\n\n";
+    std::cout << "\n";
 }
 
 
