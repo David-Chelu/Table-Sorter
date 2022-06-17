@@ -16,7 +16,7 @@ struct Entry
     int unsigned
         ID;
 
-    std::vector <std::pair <std::string, std::string>>
+    std::vector <std::string>
         column;
 };
 
@@ -35,7 +35,7 @@ void Entry::DisplayValues()
 
     for (auto component : this->column)
     {
-        std::cout << component.first + " = " + component.second + "; ";
+        std::cout << component + "; ";
     }
 
     std::cout << "\n\n";

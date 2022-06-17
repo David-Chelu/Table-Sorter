@@ -14,6 +14,9 @@ struct File
         ReadFormat(),
         ReadFormat(std::string directory);
 
+    std::vector <Entry>
+        ReadData(const Entry &format);
+
 
 
     std::string
@@ -42,24 +45,24 @@ Entry File::ReadFormat()
         format;
 
     std::fstream
-        file;
+        formatFile;
 
-    file.open(this->formatDirectory, std::ios_base::ios_base::in);
+    formatFile.open(this->formatDirectory, std::ios_base::ios_base::in);
 
-    if (file.is_open())
+    if (formatFile.is_open())
     {
         int unsigned
             entryCount = 0;
 
-        while (!file.eof())
+        while (!formatFile.eof())
         {
             entryCount++;
 
-            format.column.push_back({"Column #" + StringFromUnsignedInt(entryCount), ""});
-            file >> format.column.back().second;
+            format.column.push_back("");
+            formatFile >> format.column.back();
         }
 
-        file.close();
+        formatFile.close();
     }
     else
     {
