@@ -25,6 +25,7 @@
 		</Compiler>
 		<Unit filename="Classes.h" />
 		<Unit filename="Entry.h" />
+		<Unit filename="File.h" />
 		<Unit filename="Functions.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>

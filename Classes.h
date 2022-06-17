@@ -6,6 +6,7 @@
 // this file exists to include other files, in order to reduce clutter in the main file
 #include "Functions.h"
 #include "Entry.h"
+#include "File.h"
 
 
 

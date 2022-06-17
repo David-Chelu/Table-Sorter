@@ -4,12 +4,28 @@
 
 
 // this function sets the console cursor (used by printf and cout) at the given coordinates
-void SetCursor(SHORT xCursor = 0, SHORT yCursor = 0)
+void SetConsoleCursor(SHORT xCursor = 0, SHORT yCursor = 0)
 {
     static HANDLE
         consoleOutputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 
     SetConsoleCursorPosition(consoleOutputHandle, {xCursor, yCursor});
+}
+
+std::string StringFromUnsignedInt(int unsigned value)
+{
+    std::string
+        stringFromNumber;
+
+    while (value != 0)
+    {
+        stringFromNumber += char(value % 10 + 48);
+        value /= 10;
+    }
+
+    std::reverse(stringFromNumber.begin(), stringFromNumber.end());
+
+    return stringFromNumber;
 }
 
 
