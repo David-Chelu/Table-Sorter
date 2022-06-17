@@ -7,6 +7,7 @@
 #include "Functions.h"
 #include "Entry.h"
 #include "File.h"
+#include "Table.h"
 
 
 

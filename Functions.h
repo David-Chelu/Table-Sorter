@@ -17,13 +17,20 @@ std::string StringFromUnsignedInt(int unsigned value)
     std::string
         stringFromNumber;
 
-    while (value != 0)
+    if (value == 0)
     {
-        stringFromNumber += char(value % 10 + 48);
-        value /= 10;
+        stringFromNumber = '0';
     }
+    else
+    {
+        while (value != 0)
+        {
+            stringFromNumber += char(value % 10 + 48);
+            value /= 10;
+        }
 
-    std::reverse(stringFromNumber.begin(), stringFromNumber.end());
+        std::reverse(stringFromNumber.begin(), stringFromNumber.end());
+    }
 
     return stringFromNumber;
 }

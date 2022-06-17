@@ -154,10 +154,20 @@ bool File::WriteFormat(const Entry &format) const
 
     if (formatFile.is_open())
     {
+        std::string
+            fileOutput;
+
         for (auto component : format.column)
         {
-            formatFile << component + ' ';
+            fileOutput = fileOutput + component + ' ';
         }
+
+        while (fileOutput.back() == ' ')
+        {
+            fileOutput.pop_back();
+        }
+
+        formatFile << fileOutput;
 
         formatFile.close();
 
@@ -191,15 +201,25 @@ bool File::WriteData(const std::vector <Entry> &entry) const
 
     if (dataFile.is_open())
     {
+        std::string
+            fileOutput;
+
         for (auto line : entry)
         {
             for (auto column : line.column)
             {
-                dataFile << column << ' ';
+                fileOutput = fileOutput + column + ' ';
+            }
+
+            while (fileOutput.back() == ' ')
+            {
+                fileOutput.pop_back();
             }
 
             dataFile << '\n';
         }
+
+        dataFile << fileOutput;
 
         dataFile.close();
 
