@@ -35,6 +35,21 @@ std::string StringFromUnsignedInt(int unsigned value)
     return stringFromNumber;
 }
 
+std::string AllocateAndCompensate(const std::string &targetString, int short unsigned allocateSize)
+{
+    std::string
+        allocatedString;
+
+    allocatedString = targetString.substr(0, allocateSize);
+
+    if (allocatedString.length() < allocateSize)
+    {
+        allocatedString = allocatedString.append(allocateSize - allocatedString.length(), ' ');
+    }
+
+    return allocatedString;
+}
+
 
 
 #endif

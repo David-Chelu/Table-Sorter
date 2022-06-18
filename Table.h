@@ -56,6 +56,48 @@ void Table::CalculateColumnWidths()
     }
 }
 
+void Table::Display()
+{
+    SetConsoleCursor(0, 1);
+
+    static int short unsigned
+        lineSize;
+
+    static std::string
+        outputLine;
+
+    outputLine = "";
+
+    for (int unsigned component = 0; component < this->format.column.size(); component++)
+    {
+        (outputLine += AllocateAndCompensate(this->format.column[component], this->columnWidth[component] - 1)) += '|';
+    }
+
+    lineSize = outputLine.length();
+    outputLine += " \n";
+
+    for (auto component : this->columnWidth)
+    {
+        (outputLine += std::string(component - 1, '-')) += '|';
+    }
+
+    outputLine += " \n";
+
+    for (auto line : this->lines)
+    {
+        for (int unsigned column = 0; column < line.column.size(); column++)
+        {
+            (outputLine += AllocateAndCompensate(line.column[column], this->columnWidth[column] - 1)) += '|';
+        }
+
+        outputLine += " \n";
+    }
+
+    (outputLine += std::string(lineSize, '-')) += ' ';
+
+    std::cout << outputLine;
+}
+
 void Table::DisplayValues()
 {
     std::cout << std::string("Character for horizontal walls is \'") + this->horizontalWall + "\'."
