@@ -50,6 +50,21 @@ std::string AllocateAndCompensate(const std::string &targetString, int short uns
     return allocatedString;
 }
 
+std::string AllocateAndCompensate(int short unsigned allocateSize, const std::string &targetString)
+{
+    std::string
+        allocatedString;
+
+    allocatedString = targetString.substr(0, allocateSize);
+
+    if (allocatedString.length() < allocateSize)
+    {
+        allocatedString = std::string(allocateSize - allocatedString.length(), ' ') + allocatedString;
+    }
+
+    return allocatedString;
+}
+
 
 
 #endif
