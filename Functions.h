@@ -73,15 +73,12 @@ std::string AllocateAndCompensate(int short unsigned allocateSize, const std::st
 // this function makes use of windows functions to directly check the buffer size of the console
 std::pair<int, int> ReadBufferSizeFromWindow()
 {
-    PCONSOLE_SCREEN_BUFFER_INFO
-        consoleBufferInfo = new CONSOLE_SCREEN_BUFFER_INFO;
-
     std::pair<int, int>
         bufferSize;
 
     BOOL
         result = GetConsoleScreenBufferInfo(Default::consoleOutputHandle,
-                                            consoleBufferInfo);
+                                            &Default::consoleBufferInfo);
 
     if (!result)
     {
@@ -91,10 +88,8 @@ std::pair<int, int> ReadBufferSizeFromWindow()
                    MB_OK);
     }
 
-    bufferSize.first  = consoleBufferInfo->dwSize.X;
-    bufferSize.second = consoleBufferInfo->dwSize.Y;
-
-    delete consoleBufferInfo;
+    bufferSize.first  = Default::consoleBufferInfo.dwSize.X;
+    bufferSize.second = Default::consoleBufferInfo.dwSize.Y;
 
     return bufferSize;
 }

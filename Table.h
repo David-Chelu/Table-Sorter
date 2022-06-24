@@ -23,13 +23,16 @@ struct Table
         verticalWall;
 
     COORD
-        selection;
+        selection,
+        startDisplay,
+        word;
 
     Entry
         format;
 
     int short unsigned
-        defaultColumnWidth;
+        defaultColumnWidth,
+        wordWidth;
 
     std::pair <int, int>
         bufferSize;
@@ -50,7 +53,11 @@ Table::Table()
     this->horizontalWall = '-';
     this->verticalWall = '|';
 
-    this->selection.X = this->selection.Y = 0;
+    this->selection.X = 0;
+    this->selection.Y = -1;
+
+    this->startDisplay.X = 0;
+    this->startDisplay.Y = 0;
 
     this->defaultColumnWidth = 8;
 
@@ -69,21 +76,43 @@ void Table::CalculateColumnWidths()
 
 void Table::Display()
 {
-    SetConsoleCursor(0, 1);
+    SetConsoleCursor(this->startDisplay.X,
+                     this->startDisplay.Y);
 
     static int short unsigned
         lineSize;
 
     static std::string
+        coloredLine,
         outputLine,
         outputTable;
 
-    outputTable = "";
+    coloredLine = "";
     outputLine  = "";
+    outputTable = "";
+
+    this->wordWidth =
+    this->word.X =
+    this->word.Y = 0;
 
     for (int unsigned component = 0; component < this->format.column.size(); component++)
     {
-        (outputLine += AllocateAndCompensate(this->format.column[component], this->columnWidth[component] - 1)) += '|';
+        if (this->selection.Y == -1 && int(component) == this->selection.X)
+        {
+            this->word.Y = startDisplay.Y;
+            this->word.X = outputLine.length();
+            (outputLine += AllocateAndCompensate(this->format.column[component], this->columnWidth[component] - 1)) += this->verticalWall;
+            this->wordWidth = this->columnWidth[component];
+        }
+        else
+        {
+            (outputLine += AllocateAndCompensate(this->format.column[component], this->columnWidth[component] - 1)) += this->verticalWall;
+        }
+    }
+
+    if (this->selection.Y == -1)
+    {
+        coloredLine = outputLine;
     }
 
     lineSize = outputLine.length();
@@ -93,30 +122,58 @@ void Table::Display()
 
     for (auto component : this->columnWidth)
     {
-        (outputLine += std::string(component - 1, '-')) += '|';
+        (outputLine += std::string(component - 1, this->horizontalWall)) += this->verticalWall;
     }
 
     this->FillLine(outputLine, lineSize);
     outputTable += outputLine;
 
-    for (auto line : this->lines)
+    for (int unsigned line = 0; line < this->lines.size(); line++)
     {
         outputLine  = "";
 
-        for (int unsigned column = 0; column < line.column.size(); column++)
+        for (int unsigned column = 0; column < this->lines[line].column.size(); column++)
         {
-            (outputLine += AllocateAndCompensate(line.column[column], this->columnWidth[column] - 1)) += '|';
+            if (this->selection.Y == int(line) && int(column) == this->selection.X)
+            {
+                this->word.Y = startDisplay.Y + line + 2;
+                this->word.X = outputLine.length();
+                (outputLine += AllocateAndCompensate(this->lines[line].column[column], this->columnWidth[column] - 1)) += this->verticalWall;
+                this->wordWidth = this->columnWidth[column] - 1;
+            }
+            else
+            {
+                (outputLine += AllocateAndCompensate(this->lines[line].column[column], this->columnWidth[column] - 1)) += this->verticalWall;
+            }
+        }
+
+        if (this->selection.Y == int(line))
+        {
+            coloredLine = outputLine;
         }
 
         this->FillLine(outputLine, lineSize);
         outputTable += outputLine;
     }
 
-    outputLine = std::string(lineSize, '-');
+    outputLine = std::string(lineSize, this->horizontalWall);
     this->FillLine(outputLine, lineSize);
     outputTable += outputLine;
 
     std::cout << outputTable;
+
+    SetConsoleTextAttribute(Default::consoleOutputHandle,
+                            7 << 4);
+    SetConsoleCursor(0, this->word.Y);
+    std::cout << coloredLine;
+
+    SetConsoleTextAttribute(Default::consoleOutputHandle,
+                            8 << 4);
+    SetConsoleCursor(this->word.X, this->word.Y);
+    std::cout << coloredLine.substr(this->word.X, this->wordWidth);
+
+    SetConsoleTextAttribute(Default::consoleOutputHandle,
+                            7);
 
     this->shortened = false;
 }

@@ -1,8 +1,5 @@
 #define _WIN32_WINNT 0x0500
 
-#define LEAVE 0
-#define TRIM 1
-
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -17,6 +14,9 @@ namespace Default
     // this handle will be used to get the console buffer size
     HANDLE
         consoleOutputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    CONSOLE_SCREEN_BUFFER_INFO
+        consoleBufferInfo;
 }
 
 #include "Classes.h"
@@ -45,6 +45,11 @@ int main()
 */
 
     std::cout << "Press a number from '1' to '4' to select the column, and '-' and '+' to narrow and widen the selected columns, respectively.";
+
+    GetConsoleScreenBufferInfo(Default::consoleOutputHandle,
+                               &Default::consoleBufferInfo);
+
+    table.startDisplay.Y = Default::consoleBufferInfo.dwCursorPosition.Y + 1;
 
     bool
         updateRequired = true,
@@ -85,6 +90,42 @@ int main()
             {
                 selectedColumn = column - '1';
                 break;
+            }
+        }
+
+        if (!pressed[VK_UP] && pressing[VK_UP])
+        {
+            if (table.selection.Y > -1)
+            {
+                table.selection.Y--;
+                updateRequired = true;
+            }
+        }
+
+        if (!pressed[VK_DOWN] && pressing[VK_DOWN])
+        {
+            if (table.selection.Y < int(table.lines.size() - 1))
+            {
+                table.selection.Y++;
+                updateRequired = true;
+            }
+        }
+
+        if (!pressed[VK_LEFT] && pressing[VK_LEFT])
+        {
+            if (table.selection.X > 0)
+            {
+                table.selection.X--;
+                updateRequired = true;
+            }
+        }
+
+        if (!pressed[VK_RIGHT] && pressing[VK_RIGHT])
+        {
+            if (table.selection.X < int(table.columnWidth.size() - 1))
+            {
+                table.selection.X++;
+                updateRequired = true;
             }
         }
 
