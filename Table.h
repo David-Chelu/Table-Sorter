@@ -10,9 +10,13 @@ struct Table
     void
         CalculateColumnWidths(),
         Display(),
-        DisplayValues();
+        DisplayValues(),
+        FillLine(std::string &outputLine, int short unsigned lineSize);
 
 
+
+    bool
+        shortened;
 
     char
         horizontalWall,
@@ -27,6 +31,9 @@ struct Table
     int short unsigned
         defaultColumnWidth;
 
+    std::pair <int, int>
+        bufferSize;
+
     std::vector <Entry>
         lines;
 
@@ -38,12 +45,16 @@ struct Table
 
 Table::Table()
 {
+    this->shortened = false;
+
     this->horizontalWall = '-';
     this->verticalWall = '|';
 
     this->selection.X = this->selection.Y = 0;
 
-    this-> defaultColumnWidth = 8;
+    this->defaultColumnWidth = 8;
+
+    this->bufferSize = ReadBufferSizeFromWindow();
 }
 
 void Table::CalculateColumnWidths()
@@ -64,9 +75,11 @@ void Table::Display()
         lineSize;
 
     static std::string
-        outputLine;
+        outputLine,
+        outputTable;
 
-    outputLine = "";
+    outputTable = "";
+    outputLine  = "";
 
     for (int unsigned component = 0; component < this->format.column.size(); component++)
     {
@@ -74,28 +87,38 @@ void Table::Display()
     }
 
     lineSize = outputLine.length();
-    outputLine += " \n";
+    this->FillLine(outputLine, lineSize);
+    outputTable += outputLine;
+    outputLine  = "";
 
     for (auto component : this->columnWidth)
     {
         (outputLine += std::string(component - 1, '-')) += '|';
     }
 
-    outputLine += " \n";
+    this->FillLine(outputLine, lineSize);
+    outputTable += outputLine;
 
     for (auto line : this->lines)
     {
+        outputLine  = "";
+
         for (int unsigned column = 0; column < line.column.size(); column++)
         {
             (outputLine += AllocateAndCompensate(line.column[column], this->columnWidth[column] - 1)) += '|';
         }
 
-        outputLine += " \n";
+        this->FillLine(outputLine, lineSize);
+        outputTable += outputLine;
     }
 
-    (outputLine += std::string(lineSize, '-')) += ' ';
+    outputLine = std::string(lineSize, '-');
+    this->FillLine(outputLine, lineSize);
+    outputTable += outputLine;
 
-    std::cout << outputLine;
+    std::cout << outputTable;
+
+    this->shortened = false;
 }
 
 void Table::DisplayValues()
@@ -125,6 +148,11 @@ void Table::DisplayValues()
     }
 
     std::cout << "\n\n\n";
+}
+
+void Table::FillLine(std::string &outputLine, int short unsigned lineSize)
+{
+    outputLine = AllocateAndCompensate(outputLine, this->bufferSize.first);
 }
 
 

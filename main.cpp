@@ -1,9 +1,7 @@
 #define _WIN32_WINNT 0x0500
 
-#define ONE 0
-#define TWO 1
-#define SUB 2
-#define ADD 3
+#define LEAVE 0
+#define TRIM 1
 
 #include <iostream>
 #include <fstream>
@@ -13,6 +11,13 @@
 #include <stdio.h>
 #include <vector>
 #include <algorithm>
+
+namespace Default
+{
+    // this handle will be used to get the console buffer size
+    HANDLE
+        consoleOutputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+}
 
 #include "Classes.h"
 
@@ -39,15 +44,18 @@ int main()
     system("cls");
 */
 
-    std::cout << "Press '1' and '2' to select the column, and '-' and '+' to narrow and widen the selected columns, respectively.";
+    std::cout << "Press a number from '1' to '4' to select the column, and '-' and '+' to narrow and widen the selected columns, respectively.";
 
     bool
         updateRequired = true,
-        pressing[] = {false, false, false, false},
-        pressed[] = {false, false, false, false};
+        pressing[256],
+        pressed[256];
 
     int unsigned
         selectedColumn = -1;
+
+    ZeroMemory(pressing, sizeof(pressing) / sizeof(pressing[0]));
+    ZeroMemory(pressed,  sizeof(pressed)  / sizeof(pressed [0]));
 
     while (1)
     {
@@ -59,62 +67,39 @@ int main()
 
         CopyMemory(pressed, pressing, sizeof(pressing) / sizeof(pressing[0]));
 
-        if (GetAsyncKeyState('1'))
+        for (int unsigned index = 0; index < 256; index++)
         {
-            pressing[ONE] = true;
-        }
-        else
-        {
-            pressing[ONE] = false;
-        }
-
-        if (GetAsyncKeyState('2'))
-        {
-            pressing[TWO] = true;
-        }
-        else
-        {
-            pressing[TWO] = false;
+            if (GetAsyncKeyState(index))
+            {
+                pressing[index] = true;
+            }
+            else
+            {
+                pressing[index] = false;
+            }
         }
 
-        if (GetAsyncKeyState(VK_SUBTRACT))
-        {
-            pressing[SUB] = true;
-        }
-        else
-        {
-            pressing[SUB] = false;
-        }
-
-        if (GetAsyncKeyState(VK_ADD))
-        {
-            pressing[ADD] = true;
-        }
-        else
-        {
-            pressing[ADD] = false;
-        }
-
-        for (int unsigned column = 0; column < 2; column++)
+        for (int unsigned column = '1'; column < '5'; column++)
         {
             if (!pressed[column] && pressing[column])
             {
-                selectedColumn = column;
+                selectedColumn = column - '1';
                 break;
             }
         }
 
         if (selectedColumn != UINT_MAX)
         {
-            if (!pressed[SUB] && pressing[SUB])
+            if (!pressed[VK_SUBTRACT] && pressing[VK_SUBTRACT])
             {
                 if (table.columnWidth[selectedColumn] > 2)
                 {
                     table.columnWidth[selectedColumn]--;
+                    table.shortened = true;
                     updateRequired = true;
                 }
             }
-            else if (!pressed[ADD] && pressing[ADD])
+            else if (!pressed[VK_ADD] && pressing[VK_ADD])
             {
                 if (table.columnWidth[selectedColumn] < 39)
                 {

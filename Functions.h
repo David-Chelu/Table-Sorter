@@ -12,6 +12,7 @@ void SetConsoleCursor(SHORT xCursor = 0, SHORT yCursor = 0)
     SetConsoleCursorPosition(consoleOutputHandle, {xCursor, yCursor});
 }
 
+// converts an int unsigned into a string, where each character represents one digit
 std::string StringFromUnsignedInt(int unsigned value)
 {
     std::string
@@ -35,6 +36,8 @@ std::string StringFromUnsignedInt(int unsigned value)
     return stringFromNumber;
 }
 
+// for the table display, this function makes sure all columns are aligned to their respective size
+// it does so by adding spaces after the text, when needed (when text is aligned to the left)
 std::string AllocateAndCompensate(const std::string &targetString, int short unsigned allocateSize)
 {
     std::string
@@ -50,6 +53,8 @@ std::string AllocateAndCompensate(const std::string &targetString, int short uns
     return allocatedString;
 }
 
+// for the table display, this function makes sure all columns are aligned to their respective size
+// it does so by adding spaces before the text, when needed (when text is aligned to the right)
 std::string AllocateAndCompensate(int short unsigned allocateSize, const std::string &targetString)
 {
     std::string
@@ -65,7 +70,35 @@ std::string AllocateAndCompensate(int short unsigned allocateSize, const std::st
     return allocatedString;
 }
 
+// this function makes use of windows functions to directly check the buffer size of the console
+std::pair<int, int> ReadBufferSizeFromWindow()
+{
+    PCONSOLE_SCREEN_BUFFER_INFO
+        consoleBufferInfo = new CONSOLE_SCREEN_BUFFER_INFO;
+
+    std::pair<int, int>
+        bufferSize;
+
+    BOOL
+        result = GetConsoleScreenBufferInfo(Default::consoleOutputHandle,
+                                            consoleBufferInfo);
+
+    if (!result)
+    {
+        MessageBox(NULL,
+                   "Could not read console buffer size.",
+                   "Error",
+                   MB_OK);
+    }
+
+    bufferSize.first  = consoleBufferInfo->dwSize.X;
+    bufferSize.second = consoleBufferInfo->dwSize.Y;
+
+    delete consoleBufferInfo;
+
+    return bufferSize;
+}
+
 
 
 #endif
-
