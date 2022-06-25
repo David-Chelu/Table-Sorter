@@ -7,14 +7,16 @@ struct Table
 {
     Table();
 
+    bool
+        Sort(int mode = ASCENDING);
+
     void
         CalculateColumnWidths(),
         Display(),
         DisplayValues(),
         FillLine(std::string &outputLine, int short unsigned lineSize),
         ReadFormat(File &file),
-        ReadData(File &file),
-        Sort(int mode = ASCENDING);
+        ReadData(File &file);
 
 
 
@@ -49,7 +51,7 @@ struct Table
     std::vector <int short unsigned>
         columnWidth;
 
-    void
+    bool
         (*CustomSort)();
 };
 
@@ -72,6 +74,87 @@ Table::Table()
     this->defaultColumnWidth = 8;
 
     this->bufferSize = ReadBufferSizeFromWindow();
+}
+
+bool Table::Sort(int mode)
+{
+    static bool
+        rearranged;
+
+    rearranged = false;
+
+    switch (mode % 2)
+    {
+        case ASCENDING:
+        {
+            if (mode & SORT_BY_ID)
+            {
+                for (int unsigned line = 0; line < this->lines.size() - 1; line++)
+                {
+                    for (int unsigned compareLine = line + 1; compareLine < this->lines.size(); compareLine++)
+                    {
+                        if (this->lines[line].ID > this->lines[compareLine].ID)
+                        {
+                            std::swap(this->lines.at(line), this->lines.at(compareLine));
+                            rearranged = true;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                for (int unsigned line = 0; line < this->lines.size() - 1; line++)
+                {
+                    for (int unsigned compareLine = line + 1; compareLine < this->lines.size(); compareLine++)
+                    {
+                        if (this->lines[line].column[this->selection.X] > this->lines[compareLine].column[this->selection.X])
+                        {
+                            std::swap(this->lines.at(line), this->lines.at(compareLine));
+                            rearranged = true;
+                        }
+                    }
+                }
+            }
+
+            break;
+        }
+
+        case DESCENDING:
+        {
+            if (mode & SORT_BY_ID)
+            {
+                for (int unsigned line = 0; line < this->lines.size() - 1; line++)
+                {
+                    for (int unsigned compareLine = line + 1; compareLine < this->lines.size(); compareLine++)
+                    {
+                        if (this->lines[line].ID < this->lines[compareLine].ID)
+                        {
+                            std::swap(this->lines.at(line), this->lines.at(compareLine));
+                            rearranged = true;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                for (int unsigned line = 0; line < this->lines.size() - 1; line++)
+                {
+                    for (int unsigned compareLine = line + 1; compareLine < this->lines.size(); compareLine++)
+                    {
+                        if (this->lines[line].column[this->selection.X] < this->lines[compareLine].column[this->selection.X])
+                        {
+                            std::swap(this->lines.at(line), this->lines.at(compareLine));
+                            rearranged = true;
+                        }
+                    }
+                }
+            }
+
+            break;
+        }
+    }
+
+    return rearranged;
 }
 
 void Table::CalculateColumnWidths()

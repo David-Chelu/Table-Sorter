@@ -1,7 +1,8 @@
 #define _WIN32_WINNT 0x0500
 
-#define ASCENDING   1
-#define DESCENDING -1
+#define ASCENDING  0
+#define DESCENDING 1
+#define SORT_BY_ID 2
 
 #include <iostream>
 #include <fstream>
@@ -47,7 +48,7 @@ int main()
     system("cls");
 */
 
-    std::cout << "Press a number from '1' to '4' to select the column, and '-' and '+' to narrow and widen the selected columns, respectively.";
+    std::cout << "Press a number from '1' to '4' to select the column, and '-' and '+' to narrow and widen the selected columns, respectively.\nPress ',' to sort the table ascending and '.' to sort the table descending. This will only take place when the cursor is on the first line of the table.";
 
     GetConsoleScreenBufferInfo(Default::consoleOutputHandle,
                                &Default::consoleBufferInfo);
@@ -59,9 +60,9 @@ int main()
         pressing[256],
         pressed[256];
 
-//    int
-//        sortAscecndingKey = ',',
-//        sortDescendingKey = '.';
+    int
+        sortAscendingKey  = VK_OEM_COMMA,
+        sortDescendingKey = VK_OEM_PERIOD;
 
     int unsigned
         selectedColumn = -1;
@@ -88,6 +89,28 @@ int main()
             else
             {
                 pressing[index] = false;
+            }
+        }
+
+        if (!pressed[sortAscendingKey] && pressing[sortAscendingKey])
+        {
+            if (table.selection.Y == -1)
+            {
+                if (table.Sort(ASCENDING))
+                {
+                    updateRequired = true;
+                }
+            }
+        }
+
+        if (!pressed[sortDescendingKey] && pressing[sortDescendingKey])
+        {
+            if (table.selection.Y == -1)
+            {
+                if (table.Sort(DESCENDING))
+                {
+                    updateRequired = true;
+                }
             }
         }
 
