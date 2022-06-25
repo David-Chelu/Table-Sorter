@@ -11,12 +11,16 @@ struct Table
         CalculateColumnWidths(),
         Display(),
         DisplayValues(),
-        FillLine(std::string &outputLine, int short unsigned lineSize);
+        FillLine(std::string &outputLine, int short unsigned lineSize),
+        ReadFormat(File &file),
+        ReadData(File &file),
+        Sort(int mode = ASCENDING);
 
 
 
     bool
-        shortened;
+        modifiedFormat,
+        modifiedLines;
 
     char
         horizontalWall,
@@ -28,7 +32,8 @@ struct Table
         word;
 
     Entry
-        format;
+        format,
+        fileFormat;
 
     int short unsigned
         defaultColumnWidth,
@@ -38,17 +43,22 @@ struct Table
         bufferSize;
 
     std::vector <Entry>
-        lines;
+        lines,
+        fileLines;
 
     std::vector <int short unsigned>
         columnWidth;
+
+    void
+        (*CustomSort)();
 };
 
 
 
 Table::Table()
 {
-    this->shortened = false;
+    this->modifiedFormat =
+    this->modifiedLines = false;
 
     this->horizontalWall = '-';
     this->verticalWall = '|';
@@ -174,8 +184,6 @@ void Table::Display()
 
     SetConsoleTextAttribute(Default::consoleOutputHandle,
                             7);
-
-    this->shortened = false;
 }
 
 void Table::DisplayValues()
@@ -210,6 +218,16 @@ void Table::DisplayValues()
 void Table::FillLine(std::string &outputLine, int short unsigned lineSize)
 {
     outputLine = AllocateAndCompensate(outputLine, this->bufferSize.first);
+}
+
+void Table::ReadFormat(File &file)
+{
+    this->fileFormat = this->format = file.ReadFormat();
+}
+
+void Table::ReadData(File &file)
+{
+    this->fileLines = this->lines = file.ReadData(this->format);
 }
 
 

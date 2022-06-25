@@ -1,5 +1,8 @@
 #define _WIN32_WINNT 0x0500
 
+#define ASCENDING   1
+#define DESCENDING -1
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -34,8 +37,8 @@ int main()
 
 
     table.format.ID = -1;
-    table.format = file.ReadFormat();
-    table.lines = file.ReadData(table.format);
+    table.ReadFormat(file);
+    table.ReadData(file);
     table.CalculateColumnWidths();
 /*
     table.DisplayValues();
@@ -55,6 +58,10 @@ int main()
         updateRequired = true,
         pressing[256],
         pressed[256];
+
+//    int
+//        sortAscecndingKey = ',',
+//        sortDescendingKey = '.';
 
     int unsigned
         selectedColumn = -1;
@@ -136,7 +143,6 @@ int main()
                 if (table.columnWidth[selectedColumn] > 2)
                 {
                     table.columnWidth[selectedColumn]--;
-                    table.shortened = true;
                     updateRequired = true;
                 }
             }
