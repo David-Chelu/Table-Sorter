@@ -48,7 +48,7 @@ int main()
     system("cls");
 */
 
-    std::cout << "Press a number from '1' to '4' to select the column, and '-' and '+' to narrow and widen the selected columns, respectively.\nPress ',' to sort the table ascending and '.' to sort the table descending. This will only take place when the cursor is on the first line of the table.";
+    std::cout << "Press the arrow keys to navigate the table.\nPress '-' and '+' to narrow and widen the column on which the cursor exists.\nPress ',' to sort the table ascending and '.' to sort the table descending. This will only take place when the cursor is on the first line of the table.";
 
     GetConsoleScreenBufferInfo(Default::consoleOutputHandle,
                                &Default::consoleBufferInfo);
@@ -63,9 +63,6 @@ int main()
     int
         sortAscendingKey  = VK_OEM_COMMA,
         sortDescendingKey = VK_OEM_PERIOD;
-
-    int unsigned
-        selectedColumn = -1;
 
     ZeroMemory(pressing, sizeof(pressing) / sizeof(pressing[0]));
     ZeroMemory(pressed,  sizeof(pressed)  / sizeof(pressed [0]));
@@ -114,15 +111,6 @@ int main()
             }
         }
 
-        for (int unsigned column = '1'; column < '5'; column++)
-        {
-            if (!pressed[column] && pressing[column])
-            {
-                selectedColumn = column - '1';
-                break;
-            }
-        }
-
         if (!pressed[VK_UP] && pressing[VK_UP])
         {
             if (table.selection.Y > -1)
@@ -159,23 +147,20 @@ int main()
             }
         }
 
-        if (selectedColumn != UINT_MAX)
+        if (!pressed[VK_SUBTRACT] && pressing[VK_SUBTRACT])
         {
-            if (!pressed[VK_SUBTRACT] && pressing[VK_SUBTRACT])
+            if (table.columnWidth[table.selection.X] > 2)
             {
-                if (table.columnWidth[selectedColumn] > 2)
-                {
-                    table.columnWidth[selectedColumn]--;
-                    updateRequired = true;
-                }
+                table.columnWidth[table.selection.X]--;
+                updateRequired = true;
             }
-            else if (!pressed[VK_ADD] && pressing[VK_ADD])
+        }
+        else if (!pressed[VK_ADD] && pressing[VK_ADD])
+        {
+            if (table.columnWidth[table.selection.X] < 39)
             {
-                if (table.columnWidth[selectedColumn] < 39)
-                {
-                    table.columnWidth[selectedColumn]++;
-                    updateRequired = true;
-                }
+                table.columnWidth[table.selection.X]++;
+                updateRequired = true;
             }
         }
 
