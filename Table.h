@@ -203,14 +203,15 @@ void Table::Display()
         }
     }
 
+    lineSize = outputLine.length();
+    this->FillLine(outputLine, lineSize);
+    outputTable += outputLine;
+
     if (this->selection.Y == -1)
     {
         coloredLine = outputLine;
     }
 
-    lineSize = outputLine.length();
-    this->FillLine(outputLine, lineSize);
-    outputTable += outputLine;
     outputLine  = "";
 
     for (auto component : this->columnWidth)
@@ -240,13 +241,13 @@ void Table::Display()
             }
         }
 
+        this->FillLine(outputLine, lineSize);
+        outputTable += outputLine;
+
         if (this->selection.Y == int(line))
         {
             coloredLine = outputLine;
         }
-
-        this->FillLine(outputLine, lineSize);
-        outputTable += outputLine;
     }
 
     outputLine = std::string(lineSize, this->horizontalWall);
@@ -258,7 +259,7 @@ void Table::Display()
     SetConsoleTextAttribute(Default::consoleOutputHandle,
                             7 << 4);
     SetConsoleCursor(0, this->word.Y);
-    std::cout << coloredLine;
+    std::cout << coloredLine.substr(0, lineSize);
 
     SetConsoleTextAttribute(Default::consoleOutputHandle,
                             8 << 4);
