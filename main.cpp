@@ -12,6 +12,8 @@
 #include <stdio.h>
 #include <vector>
 #include <algorithm>
+#include <stdlib.h>
+#include <limits.h>
 
 namespace Default
 {
@@ -24,6 +26,8 @@ namespace Default
 }
 
 #include "Classes.h"
+
+#include "CustomSort.h"
 
 
 
@@ -61,8 +65,10 @@ int main()
         pressed[256];
 
     int
-        sortAscendingKey  = VK_OEM_COMMA,
-        sortDescendingKey = VK_OEM_PERIOD;
+        sortAscendingKey        = VK_OEM_COMMA,
+        sortDescendingKey       = VK_OEM_PERIOD,
+        customSortAscendingKey  = VK_DIVIDE,
+        customSortDescendingKey = VK_MULTIPLY;
 
     ZeroMemory(pressing, sizeof(pressing) / sizeof(pressing[0]));
     ZeroMemory(pressed,  sizeof(pressed)  / sizeof(pressed [0]));
@@ -86,6 +92,22 @@ int main()
             else
             {
                 pressing[index] = false;
+            }
+        }
+
+        if (!pressed[customSortAscendingKey] && pressing[customSortAscendingKey])
+        {
+            if (table.CustomSort(ASCENDING))
+            {
+                updateRequired = true;
+            }
+        }
+
+        if (!pressed[customSortDescendingKey] && pressing[customSortDescendingKey])
+        {
+            if (table.CustomSort(DESCENDING))
+            {
+                updateRequired = true;
             }
         }
 

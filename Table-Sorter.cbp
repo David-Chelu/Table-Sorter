@@ -24,6 +24,7 @@
 			<Add option="-fexceptions" />
 		</Compiler>
 		<Unit filename="Classes.h" />
+		<Unit filename="CustomSort.h" />
 		<Unit filename="Entry.h" />
 		<Unit filename="File.h" />
 		<Unit filename="Functions.h" />

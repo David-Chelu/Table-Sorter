@@ -8,7 +8,8 @@ struct Table
     Table();
 
     bool
-        Sort(int mode = ASCENDING);
+        Sort(int mode = ASCENDING),
+        CustomSort(int mode = ASCENDING);
 
     void
         CalculateColumnWidths(),
@@ -50,9 +51,6 @@ struct Table
 
     std::vector <int short unsigned>
         columnWidth;
-
-    bool
-        (*CustomSort)();
 };
 
 
