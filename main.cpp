@@ -4,6 +4,9 @@
 #define DESCENDING 1
 #define SORT_BY_ID 2
 
+#define OPTIONS 0
+#define TABLE   1
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -14,16 +17,6 @@
 #include <algorithm>
 #include <stdlib.h>
 #include <limits.h>
-
-namespace Default
-{
-    // this handle will be used to get the console buffer size
-    HANDLE
-        consoleOutputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-
-    CONSOLE_SCREEN_BUFFER_INFO
-        consoleBufferInfo;
-}
 
 #include "Classes.h"
 
@@ -45,12 +38,6 @@ int main()
     table.ReadFormat(file);
     table.ReadData(file);
     table.CalculateColumnWidths();
-/*
-    table.DisplayValues();
-
-    Sleep(1000);
-    system("cls");
-*/
 
     std::cout << "Press the arrow keys to navigate the table.\nPress '-' and '+' to narrow and widen the column on which the cursor exists.\nPress ',' to sort the table ascending and '.' to sort the table descending. This will only take place when the cursor is on the first line of the table.";
 
@@ -63,6 +50,9 @@ int main()
         updateRequired = true,
         pressing[256],
         pressed[256];
+
+    char
+        screen = OPTIONS;
 
     int
         sortAscendingKey        = VK_OEM_COMMA,
@@ -77,7 +67,13 @@ int main()
     {
         if (updateRequired)
         {
-            table.Display();
+            if (screen == OPTIONS)
+            {
+            }
+            else
+            {
+                table.Display();
+            }
             updateRequired = false;
         }
 
