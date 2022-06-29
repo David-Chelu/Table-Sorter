@@ -26,6 +26,8 @@
 
 int main()
 {
+    LoadKeys();
+
     Table
         table;
 
@@ -52,13 +54,7 @@ int main()
         pressed[256];
 
     char
-        screen = OPTIONS;
-
-    int
-        sortAscendingKey        = VK_OEM_COMMA,
-        sortDescendingKey       = VK_OEM_PERIOD,
-        customSortAscendingKey  = VK_DIVIDE,
-        customSortDescendingKey = VK_MULTIPLY;
+        screen = TABLE;
 
     ZeroMemory(pressing, sizeof(pressing) / sizeof(pressing[0]));
     ZeroMemory(pressed,  sizeof(pressed)  / sizeof(pressed [0]));
@@ -91,7 +87,7 @@ int main()
             }
         }
 
-        if (!pressed[customSortAscendingKey] && pressing[customSortAscendingKey])
+        if (!pressed[Settings::Key::customSortAscending] && pressing[Settings::Key::customSortAscending])
         {
             if (table.CustomSort(ASCENDING))
             {
@@ -99,7 +95,7 @@ int main()
             }
         }
 
-        if (!pressed[customSortDescendingKey] && pressing[customSortDescendingKey])
+        if (!pressed[Settings::Key::customSortDescending] && pressing[Settings::Key::customSortDescending])
         {
             if (table.CustomSort(DESCENDING))
             {
@@ -107,7 +103,7 @@ int main()
             }
         }
 
-        if (!pressed[sortAscendingKey] && pressing[sortAscendingKey])
+        if (!pressed[Settings::Key::sortAscending] && pressing[Settings::Key::sortAscending])
         {
             if (table.selection.Y == -1)
             {
@@ -118,7 +114,7 @@ int main()
             }
         }
 
-        if (!pressed[sortDescendingKey] && pressing[sortDescendingKey])
+        if (!pressed[Settings::Key::sortDescending] && pressing[Settings::Key::sortDescending])
         {
             if (table.selection.Y == -1)
             {
@@ -129,7 +125,7 @@ int main()
             }
         }
 
-        if (!pressed[VK_UP] && pressing[VK_UP])
+        if (!pressed[Settings::Key::moveSelectionUp] && pressing[Settings::Key::moveSelectionUp])
         {
             if (table.selection.Y > -1)
             {
@@ -138,7 +134,7 @@ int main()
             }
         }
 
-        if (!pressed[VK_DOWN] && pressing[VK_DOWN])
+        if (!pressed[Settings::Key::moveSelectionDown] && pressing[Settings::Key::moveSelectionDown])
         {
             if (table.selection.Y < int(table.lines.size() - 1))
             {
@@ -147,7 +143,7 @@ int main()
             }
         }
 
-        if (!pressed[VK_LEFT] && pressing[VK_LEFT])
+        if (!pressed[Settings::Key::moveSelectionLeft] && pressing[Settings::Key::moveSelectionLeft])
         {
             if (table.selection.X > 0)
             {
@@ -156,7 +152,7 @@ int main()
             }
         }
 
-        if (!pressed[VK_RIGHT] && pressing[VK_RIGHT])
+        if (!pressed[Settings::Key::moveSelectionRight] && pressing[Settings::Key::moveSelectionRight])
         {
             if (table.selection.X < int(table.columnWidth.size() - 1))
             {
@@ -165,7 +161,7 @@ int main()
             }
         }
 
-        if (!pressed[VK_SUBTRACT] && pressing[VK_SUBTRACT])
+        if (!pressed[Settings::Key::shrinkColumn] && pressing[Settings::Key::shrinkColumn])
         {
             if (table.columnWidth[table.selection.X] > 2)
             {
@@ -173,7 +169,7 @@ int main()
                 updateRequired = true;
             }
         }
-        else if (!pressed[VK_ADD] && pressing[VK_ADD])
+        else if (!pressed[Settings::Key::expandColumn] && pressing[Settings::Key::expandColumn])
         {
             if (table.columnWidth[table.selection.X] < 39)
             {

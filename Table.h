@@ -193,7 +193,7 @@ void Table::Display()
             this->word.Y = startDisplay.Y;
             this->word.X = outputLine.length();
             (outputLine += AllocateAndCompensate(this->format.column[component], this->columnWidth[component] - 1)) += this->verticalWall;
-            this->wordWidth = this->columnWidth[component];
+            this->wordWidth = this->columnWidth[component] - 1;
         }
         else
         {
@@ -255,17 +255,17 @@ void Table::Display()
     std::cout << outputTable;
 
     SetConsoleTextAttribute(Default::consoleOutputHandle,
-                            7 << 4);
+                            Settings::lineColor);
     SetConsoleCursor(0, this->word.Y);
     std::cout << coloredLine.substr(0, lineSize);
 
     SetConsoleTextAttribute(Default::consoleOutputHandle,
-                            8 << 4);
+                            Settings::wordColor);
     SetConsoleCursor(this->word.X, this->word.Y);
     std::cout << coloredLine.substr(this->word.X, this->wordWidth);
 
     SetConsoleTextAttribute(Default::consoleOutputHandle,
-                            7);
+                            Settings::idleColor);
 }
 
 void Table::DisplayValues()

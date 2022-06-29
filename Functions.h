@@ -94,6 +94,20 @@ std::pair<int, int> ReadBufferSizeFromWindow()
     return bufferSize;
 }
 
+void LoadKeys()
+{
+    Settings::Key::sortAscending        = Default::Key::sortAscending;
+    Settings::Key::sortDescending       = Default::Key::sortDescending;
+    Settings::Key::customSortAscending  = Default::Key::customSortAscending;
+    Settings::Key::customSortDescending = Default::Key::customSortDescending;
+    Settings::Key::expandColumn         = Default::Key::expandColumn;
+    Settings::Key::shrinkColumn         = Default::Key::shrinkColumn;
+    Settings::Key::moveSelectionUp      = Default::Key::moveSelectionUp;
+    Settings::Key::moveSelectionDown    = Default::Key::moveSelectionDown;
+    Settings::Key::moveSelectionLeft    = Default::Key::moveSelectionLeft;
+    Settings::Key::moveSelectionRight   = Default::Key::moveSelectionRight;
+}
+
 
 
 #endif
