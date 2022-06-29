@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1656519154 source:d:\programming\projects (portfolio)\2022.06.11 (table-sorter)\main.cpp
+1656523257 source:d:\programming\projects (portfolio)\2022.06.11 (table-sorter)\main.cpp
 	<iostream>
 	<fstream>
 	<string>
@@ -13,19 +13,19 @@
 	"Classes.h"
 	"CustomSort.h"
 
-1656518999 d:\programming\projects (portfolio)\2022.06.11 (table-sorter)\classes.h
+1656520765 d:\programming\projects (portfolio)\2022.06.11 (table-sorter)\classes.h
 	"Functions.h"
 	"Entry.h"
 	"File.h"
 	"Table.h"
 
-1656157806 d:\programming\projects (portfolio)\2022.06.11 (table-sorter)\functions.h
+1656524212 d:\programming\projects (portfolio)\2022.06.11 (table-sorter)\functions.h
 
 1655466973 d:\programming\projects (portfolio)\2022.06.11 (table-sorter)\entry.h
 
-1655473295 d:\programming\projects (portfolio)\2022.06.11 (table-sorter)\file.h
+1656524369 d:\programming\projects (portfolio)\2022.06.11 (table-sorter)\file.h
 
-1656519404 d:\programming\projects (portfolio)\2022.06.11 (table-sorter)\table.h
+1656522523 d:\programming\projects (portfolio)\2022.06.11 (table-sorter)\table.h
 
 1656264378 d:\programming\projects (portfolio)\2022.06.11 (table-sorter)\customsort.h
 

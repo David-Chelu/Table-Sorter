@@ -108,6 +108,18 @@ void LoadKeys()
     Settings::Key::moveSelectionRight   = Default::Key::moveSelectionRight;
 }
 
+std::string StripString(const std::string &target)
+{
+    size_t
+        start,
+        stop;
+
+    for (start = 0;                  target[start] == ' '; start++);
+    for (stop = target.length() - 1; target[stop]  == ' '; stop--);
+
+    return target.substr(start, stop - start + 1);
+}
+
 
 
 #endif

@@ -36,7 +36,7 @@ struct File
 File::File()
 {
     this->formatDirectory = "format.txt";
-    this->dataDirectory = "data.txt";
+    this->dataDirectory   = "data.txt";
 }
 
 void File::DisplayValues()
@@ -67,6 +67,7 @@ Entry File::ReadFormat()
 
             format.column.push_back("");
             formatFile >> format.column.back();
+            std::replace(format.column.back().begin(), format.column.back().end(), '_', ' ');
         }
 
         formatFile.close();
@@ -117,6 +118,8 @@ std::vector <Entry> File::ReadData(const Entry &format)
             for (int unsigned component = 0; component < format.column.size() && !dataFile.eof(); component++)
             {
                 dataFile >> fileLine.column[component];
+
+                std::replace(fileLine.column[component].begin(), fileLine.column[component].end(), '_', ' ');
             }
 
             entry.push_back(fileLine);
@@ -159,6 +162,10 @@ bool File::WriteFormat(const Entry &format) const
 
         for (auto component : format.column)
         {
+            component = StripString(component);
+
+            std::replace(component.begin(), component.end(), ' ', '_');
+
             fileOutput = fileOutput + component + ' ';
         }
 
@@ -208,6 +215,10 @@ bool File::WriteData(const std::vector <Entry> &entry) const
         {
             for (auto column : line.column)
             {
+                column = StripString(column);
+
+                std::replace(column.begin(), column.end(), ' ', '_');
+
                 fileOutput = fileOutput + column + ' ';
             }
 
@@ -216,9 +227,10 @@ bool File::WriteData(const std::vector <Entry> &entry) const
                 fileOutput.pop_back();
             }
 
-            dataFile << '\n';
+            fileOutput += '\n';
         }
 
+        fileOutput.pop_back();
         dataFile << fileOutput;
 
         dataFile.close();

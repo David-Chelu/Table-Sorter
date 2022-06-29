@@ -17,7 +17,9 @@ struct Table
         DisplayValues(),
         FillLine(std::string &outputLine, int short unsigned lineSize),
         ReadFormat(File &file),
-        ReadData(File &file);
+        ReadData(File &file),
+        WriteFormat(File &file),
+        WriteData(File &file);
 
 
 
@@ -310,6 +312,16 @@ void Table::ReadFormat(File &file)
 void Table::ReadData(File &file)
 {
     this->fileLines = this->lines = file.ReadData(this->format);
+}
+
+void Table::WriteFormat(File &file)
+{
+    file.WriteFormat(this->format);
+}
+
+void Table::WriteData(File &file)
+{
+    file.WriteData(this->lines);
 }
 
 
