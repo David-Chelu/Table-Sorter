@@ -54,7 +54,7 @@ Entry File::ReadFormat()
     std::fstream
         formatFile;
 
-    formatFile.open(this->formatDirectory, std::ios_base::ios_base::in);
+    formatFile.open(this->formatDirectory, FILE_IN);
 
     if (formatFile.is_open())
     {
@@ -99,7 +99,7 @@ std::vector <Entry> File::ReadData(const Entry &format)
     std::fstream
         dataFile;
 
-    dataFile.open(this->dataDirectory, std::ios_base::ios_base::in);
+    dataFile.open(this->dataDirectory, FILE_IN);
 
     if (dataFile.is_open())
     {
@@ -153,7 +153,7 @@ bool File::WriteFormat(const Entry &format) const
     std::fstream
         formatFile;
 
-    formatFile.open(this->formatDirectory, std::ios_base::ios_base::out);
+    formatFile.open(this->formatDirectory, FILE_OUT);
 
     if (formatFile.is_open())
     {
@@ -204,7 +204,7 @@ bool File::WriteData(const std::vector <Entry> &entry) const
     std::fstream
         dataFile;
 
-    dataFile.open(this->dataDirectory, std::ios_base::ios_base::out);
+    dataFile.open(this->dataDirectory, FILE_OUT);
 
     if (dataFile.is_open())
     {

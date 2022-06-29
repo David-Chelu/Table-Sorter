@@ -3,6 +3,15 @@
 
 
 
+#define ASCENDING  0
+#define DESCENDING 1
+#define SORT_BY_ID 2
+
+#define FILE_IN  std::ios_base::ios_base::in
+#define FILE_OUT std::ios_base::ios_base::out
+
+
+
 namespace Default
 {
     // this handle will be used to get the console buffer size
@@ -11,6 +20,17 @@ namespace Default
 
     CONSOLE_SCREEN_BUFFER_INFO
         consoleBufferInfo;
+
+    std::string
+        settingsDirectory = "settings.tsr";
+
+    namespace Color
+    {
+        WORD
+            idle = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE,
+            line = BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE | BACKGROUND_INTENSITY,
+            word = BACKGROUND_INTENSITY;
+    }
 
     namespace Key
     {
@@ -30,10 +50,13 @@ namespace Default
 
 namespace Settings
 {
-    WORD
-        idleColor = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE,
-        lineColor = BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE | BACKGROUND_INTENSITY,
-        wordColor = BACKGROUND_INTENSITY;
+    namespace Color
+    {
+        WORD
+            idle,
+            line,
+            word;
+    }
 
     namespace Key
     {

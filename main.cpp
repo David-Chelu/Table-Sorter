@@ -1,9 +1,5 @@
 #define _WIN32_WINNT 0x0500
 
-#define ASCENDING  0
-#define DESCENDING 1
-#define SORT_BY_ID 2
-
 #define OPTIONS 0
 #define TABLE   1
 
@@ -26,8 +22,6 @@
 
 int main()
 {
-    LoadKeys();
-
     Table
         table;
 
@@ -41,12 +35,9 @@ int main()
     table.ReadData(file);
     table.CalculateColumnWidths();
 
-    std::cout << "Press the arrow keys to navigate the table.\nPress '-' and '+' to narrow and widen the column on which the cursor exists.\nPress ',' to sort the table ascending and '.' to sort the table descending. This will only take place when the cursor is on the first line of the table.";
+    LoadSettings();
 
-    GetConsoleScreenBufferInfo(Default::consoleOutputHandle,
-                               &Default::consoleBufferInfo);
-
-    table.startDisplay.Y = Default::consoleBufferInfo.dwCursorPosition.Y + 1;
+    table.startDisplay.Y = Default::consoleBufferInfo.dwCursorPosition.Y;
 
     bool
         updateRequired = true,
