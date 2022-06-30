@@ -28,6 +28,8 @@
 		<Unit filename="Entry.h" />
 		<Unit filename="File.h" />
 		<Unit filename="Functions.h" />
+		<Unit filename="MainScreen.h" />
+		<Unit filename="SettingsScreen.h" />
 		<Unit filename="Table.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>

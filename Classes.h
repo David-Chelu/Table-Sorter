@@ -48,7 +48,8 @@ namespace Default
             moveSelectionDown    = VK_DOWN,
             moveSelectionLeft    = VK_LEFT,
             moveSelectionRight   = VK_RIGHT,
-            exit                 = VK_ESCAPE;
+            exit                 = VK_ESCAPE,
+            open                 = VK_RETURN;
     }
 }
 
@@ -75,7 +76,8 @@ namespace Settings
             moveSelectionDown,
             moveSelectionLeft,
             moveSelectionRight,
-            exit;
+            exit,
+            open;
     }
 }
 
@@ -86,6 +88,8 @@ namespace Settings
 #include "Entry.h"
 #include "File.h"
 #include "Table.h"
+#include "MainScreen.h"
+#include "SettingsScreen.h"
 
 
 

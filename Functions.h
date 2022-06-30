@@ -141,6 +141,7 @@ bool LoadSettings(const std::string &directory)
         loadFile.read((char*)&Settings::Key::moveSelectionLeft,    sizeof(Settings::Key::moveSelectionLeft));
         loadFile.read((char*)&Settings::Key::moveSelectionRight,   sizeof(Settings::Key::moveSelectionRight));
         loadFile.read((char*)&Settings::Key::exit,                 sizeof(Settings::Key::exit));
+        loadFile.read((char*)&Settings::Key::open,                 sizeof(Settings::Key::open));
 
         loadFile.close();
     }
@@ -161,15 +162,13 @@ bool LoadSettings(const std::string &directory)
         Settings::Key::moveSelectionLeft    = Default::Key::moveSelectionLeft;
         Settings::Key::moveSelectionRight   = Default::Key::moveSelectionRight;
         Settings::Key::exit                 = Default::Key::exit;
+        Settings::Key::open                 = Default::Key::open;
 
         result = false;
     }
 
     GetConsoleScreenBufferInfo(Default::consoleOutputHandle,
                                &Default::consoleBufferInfo);
-
-    SetConsoleTextAttribute(Default::consoleOutputHandle,
-                            Settings::Color::idle);
 
     return result;
 }
@@ -203,6 +202,7 @@ bool SaveSettings(const std::string &directory)
         saveFile.write((char*)&Settings::Key::moveSelectionLeft,    sizeof(Settings::Key::moveSelectionLeft));
         saveFile.write((char*)&Settings::Key::moveSelectionRight,   sizeof(Settings::Key::moveSelectionRight));
         saveFile.write((char*)&Settings::Key::exit,                 sizeof(Settings::Key::exit));
+        saveFile.write((char*)&Settings::Key::open,                 sizeof(Settings::Key::open));
 
         saveFile.close();
     }
@@ -223,6 +223,12 @@ bool SaveSettings(const std::string &directory)
 bool SaveSettings()
 {
     return SaveSettings(Default::settingsDirectory);
+}
+
+void ChangeTextColor(WORD newColor)
+{
+    SetConsoleTextAttribute(Default::consoleOutputHandle,
+                            newColor);
 }
 
 

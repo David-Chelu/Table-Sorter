@@ -256,18 +256,15 @@ void Table::Display()
 
     std::cout << outputTable;
 
-    SetConsoleTextAttribute(Default::consoleOutputHandle,
-                            Settings::Color::line);
+    ChangeTextColor(Settings::Color::line);
     SetConsoleCursor(0, this->word.Y);
     std::cout << coloredLine.substr(0, lineSize);
 
-    SetConsoleTextAttribute(Default::consoleOutputHandle,
-                            Settings::Color::word);
+    ChangeTextColor(Settings::Color::word);
     SetConsoleCursor(this->word.X, this->word.Y);
     std::cout << coloredLine.substr(this->word.X, this->wordWidth);
 
-    SetConsoleTextAttribute(Default::consoleOutputHandle,
-                            Settings::Color::idle);
+    ChangeTextColor(Settings::Color::idle);
 }
 
 void Table::DisplayValues()

@@ -25,7 +25,13 @@ int main()
 {
     Table
         table;
+    MainScreen
+        mainScreen;
 
+/*
+    SettingsScreen
+        settingsScreen;
+*/
     File
         file;
 
@@ -36,7 +42,14 @@ int main()
     table.ReadData(file);
     table.CalculateColumnWidths();
 
+    mainScreen.AddLine("Table View");
+    mainScreen.AddLine("Settings");
+    mainScreen.AddLine("Exit");
+
     LoadSettings();
+
+//    LoadSettings("sad");
+//    SaveSettings();
 
     table.startDisplay.Y = Default::consoleBufferInfo.dwCursorPosition.Y;
 
@@ -57,12 +70,11 @@ int main()
         {
             if (screen == TABLE)
             {
-                ResetScreen();
                 table.Display();
             }
             else if (screen == MAIN)
             {
-                ResetScreen();
+                mainScreen.Display();
             }
 
             updateRequired = false;
@@ -88,7 +100,6 @@ int main()
 
         if (!pressed[Settings::Key::customSortAscending] && pressing[Settings::Key::customSortAscending])
         {
-
             if (screen == TABLE)
             {
                 if (table.CustomSort(ASCENDING))
@@ -100,7 +111,6 @@ int main()
 
         if (!pressed[Settings::Key::customSortDescending] && pressing[Settings::Key::customSortDescending])
         {
-
             if (screen == TABLE)
             {
                 if (table.CustomSort(DESCENDING))
@@ -112,7 +122,6 @@ int main()
 
         if (!pressed[Settings::Key::sortAscending] && pressing[Settings::Key::sortAscending])
         {
-
             if (screen == TABLE)
             {
                 if (table.selection.Y == -1)
@@ -127,7 +136,6 @@ int main()
 
         if (!pressed[Settings::Key::sortDescending] && pressing[Settings::Key::sortDescending])
         {
-
             if (screen == TABLE)
             {
                 if (table.selection.Y == -1)
@@ -142,7 +150,6 @@ int main()
 
         if (!pressed[Settings::Key::moveSelectionUp] && pressing[Settings::Key::moveSelectionUp])
         {
-
             if (screen == TABLE)
             {
                 if (table.selection.Y > -1)
@@ -151,11 +158,18 @@ int main()
                     updateRequired = true;
                 }
             }
+            else if (screen == MAIN)
+            {
+                if (mainScreen.selectedLine > 0)
+                {
+                    mainScreen.selectedLine--;
+                    updateRequired = true;
+                }
+            }
         }
 
         if (!pressed[Settings::Key::moveSelectionDown] && pressing[Settings::Key::moveSelectionDown])
         {
-
             if (screen == TABLE)
             {
                 if (table.selection.Y < int(table.lines.size() - 1))
@@ -164,11 +178,18 @@ int main()
                     updateRequired = true;
                 }
             }
+            else if (screen == MAIN)
+            {
+                if (mainScreen.selectedLine < mainScreen.lines.size() - 1)
+                {
+                    mainScreen.selectedLine++;
+                    updateRequired = true;
+                }
+            }
         }
 
         if (!pressed[Settings::Key::moveSelectionLeft] && pressing[Settings::Key::moveSelectionLeft])
         {
-
             if (screen == TABLE)
             {
                 if (table.selection.X > 0)
@@ -181,7 +202,6 @@ int main()
 
         if (!pressed[Settings::Key::moveSelectionRight] && pressing[Settings::Key::moveSelectionRight])
         {
-
             if (screen == TABLE)
             {
                 if (table.selection.X < int(table.columnWidth.size() - 1))
@@ -194,7 +214,6 @@ int main()
 
         if (!pressed[Settings::Key::shrinkColumn] && pressing[Settings::Key::shrinkColumn])
         {
-
             if (screen == TABLE)
             {
                 if (table.columnWidth[table.selection.X] > 2)
@@ -220,12 +239,53 @@ int main()
         {
             if (screen == TABLE)
             {
+                ChangeTextColor(Settings::Color::idle);
+                ResetScreen();
+
                 screen = MAIN;
                 updateRequired = true;
             }
             else if (screen == MAIN)
             {
                 break;
+            }
+            else if (screen == SETTINGS)
+            {
+                ChangeTextColor(Settings::Color::idle);
+                ResetScreen();
+
+                screen = MAIN;
+                updateRequired = true;
+            }
+        }
+
+        if (!pressed[Settings::Key::open] && pressing[Settings::Key::open])
+        {
+            if (screen == TABLE)
+            {
+                // need to code it
+            }
+            else if (screen == MAIN)
+            {
+                if (!mainScreen.lines[mainScreen.selectedLine].compare("Table View"))
+                {
+                    ChangeTextColor(Settings::Color::idle);
+                    ResetScreen();
+
+                    screen = TABLE;
+                    updateRequired = true;
+                }
+                else if (!mainScreen.lines[mainScreen.selectedLine].compare("Settings"))
+                {
+                }
+                else if (!mainScreen.lines[mainScreen.selectedLine].compare("Exit"))
+                {
+                    break;
+                }
+            }
+            else if (screen == SETTINGS)
+            {
+                // need to code it
             }
         }
 
