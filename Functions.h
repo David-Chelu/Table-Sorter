@@ -106,8 +106,16 @@ std::string StripString(const std::string &target)
     return target.substr(start, stop - start + 1);
 }
 
+void ChangeTextColor(WORD newColor)
+{
+    SetConsoleTextAttribute(Default::consoleOutputHandle,
+                            newColor);
+}
+
 void ResetScreen()
 {
+    ChangeTextColor(Settings::Color::idle);
+
     std::cout << std::string(Default::consoleBufferInfo.dwSize.X * Default::consoleBufferInfo.dwSize.Y,
                              ' ');
 
@@ -142,6 +150,11 @@ bool LoadSettings(const std::string &directory)
         loadFile.read((char*)&Settings::Key::moveSelectionRight,   sizeof(Settings::Key::moveSelectionRight));
         loadFile.read((char*)&Settings::Key::exit,                 sizeof(Settings::Key::exit));
         loadFile.read((char*)&Settings::Key::open,                 sizeof(Settings::Key::open));
+        loadFile.read((char*)&Settings::Key::reassignValue,        sizeof(Settings::Key::reassignValue));
+        loadFile.read((char*)&Settings::Key::increaseAttribute,    sizeof(Settings::Key::increaseAttribute));
+        loadFile.read((char*)&Settings::Key::decreaseAttribute,    sizeof(Settings::Key::decreaseAttribute));
+        loadFile.read((char*)&Settings::Key::selectFirstPart,      sizeof(Settings::Key::selectFirstPart));
+        loadFile.read((char*)&Settings::Key::selectSecondPart,     sizeof(Settings::Key::selectSecondPart));
 
         loadFile.close();
     }
@@ -163,6 +176,11 @@ bool LoadSettings(const std::string &directory)
         Settings::Key::moveSelectionRight   = Default::Key::moveSelectionRight;
         Settings::Key::exit                 = Default::Key::exit;
         Settings::Key::open                 = Default::Key::open;
+        Settings::Key::reassignValue        = Default::Key::reassignValue;
+        Settings::Key::increaseAttribute    = Default::Key::increaseAttribute;
+        Settings::Key::decreaseAttribute    = Default::Key::decreaseAttribute;
+        Settings::Key::selectFirstPart      = Default::Key::selectFirstPart;
+        Settings::Key::selectSecondPart     = Default::Key::selectSecondPart;
 
         result = false;
     }
@@ -203,6 +221,11 @@ bool SaveSettings(const std::string &directory)
         saveFile.write((char*)&Settings::Key::moveSelectionRight,   sizeof(Settings::Key::moveSelectionRight));
         saveFile.write((char*)&Settings::Key::exit,                 sizeof(Settings::Key::exit));
         saveFile.write((char*)&Settings::Key::open,                 sizeof(Settings::Key::open));
+        saveFile.write((char*)&Settings::Key::reassignValue,        sizeof(Settings::Key::reassignValue));
+        saveFile.write((char*)&Settings::Key::increaseAttribute,    sizeof(Settings::Key::increaseAttribute));
+        saveFile.write((char*)&Settings::Key::decreaseAttribute,    sizeof(Settings::Key::decreaseAttribute));
+        saveFile.write((char*)&Settings::Key::selectFirstPart,      sizeof(Settings::Key::selectFirstPart));
+        saveFile.write((char*)&Settings::Key::selectSecondPart,     sizeof(Settings::Key::selectSecondPart));
 
         saveFile.close();
     }
@@ -223,12 +246,6 @@ bool SaveSettings(const std::string &directory)
 bool SaveSettings()
 {
     return SaveSettings(Default::settingsDirectory);
-}
-
-void ChangeTextColor(WORD newColor)
-{
-    SetConsoleTextAttribute(Default::consoleOutputHandle,
-                            newColor);
 }
 
 

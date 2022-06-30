@@ -49,7 +49,12 @@ namespace Default
             moveSelectionLeft    = VK_LEFT,
             moveSelectionRight   = VK_RIGHT,
             exit                 = VK_ESCAPE,
-            open                 = VK_RETURN;
+            open                 = VK_RETURN,
+            reassignValue        = VK_SPACE,
+            increaseAttribute    = VK_ADD,
+            decreaseAttribute    = VK_SUBTRACT,
+            selectFirstPart      = VK_NUMPAD1,
+            selectSecondPart     = VK_NUMPAD2;
     }
 }
 
@@ -77,7 +82,12 @@ namespace Settings
             moveSelectionLeft,
             moveSelectionRight,
             exit,
-            open;
+            open,
+            reassignValue,
+            increaseAttribute,
+            decreaseAttribute,
+            selectFirstPart,
+            selectSecondPart;
     }
 }
 

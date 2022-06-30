@@ -169,9 +169,6 @@ void Table::CalculateColumnWidths()
 
 void Table::Display()
 {
-    SetConsoleCursor(this->startDisplay.X,
-                     this->startDisplay.Y);
-
     static int short unsigned
         lineSize;
 
@@ -254,6 +251,9 @@ void Table::Display()
     this->FillLine(outputLine, lineSize);
     outputTable += outputLine;
 
+    ChangeTextColor(Settings::Color::idle);
+    SetConsoleCursor(this->startDisplay.X,
+                     this->startDisplay.Y);
     std::cout << outputTable;
 
     ChangeTextColor(Settings::Color::line);

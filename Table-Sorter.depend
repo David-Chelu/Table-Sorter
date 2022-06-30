@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1656568706 source:d:\programming\projects (portfolio)\2022.06.11 (table-sorter)\main.cpp
+1656617962 source:d:\programming\projects (portfolio)\2022.06.11 (table-sorter)\main.cpp
 	<iostream>
 	<fstream>
 	<string>
@@ -13,19 +13,25 @@
 	"Classes.h"
 	"CustomSort.h"
 
-1656568332 d:\programming\projects (portfolio)\2022.06.11 (table-sorter)\classes.h
+1656613429 d:\programming\projects (portfolio)\2022.06.11 (table-sorter)\classes.h
 	"Functions.h"
 	"Entry.h"
 	"File.h"
 	"Table.h"
+	"MainScreen.h"
+	"SettingsScreen.h"
 
-1656568629 d:\programming\projects (portfolio)\2022.06.11 (table-sorter)\functions.h
+1656615811 d:\programming\projects (portfolio)\2022.06.11 (table-sorter)\functions.h
 
 1655466973 d:\programming\projects (portfolio)\2022.06.11 (table-sorter)\entry.h
 
 1656525414 d:\programming\projects (portfolio)\2022.06.11 (table-sorter)\file.h
 
-1656527329 d:\programming\projects (portfolio)\2022.06.11 (table-sorter)\table.h
+1656615344 d:\programming\projects (portfolio)\2022.06.11 (table-sorter)\table.h
 
 1656264378 d:\programming\projects (portfolio)\2022.06.11 (table-sorter)\customsort.h
+
+1656615304 d:\programming\projects (portfolio)\2022.06.11 (table-sorter)\mainscreen.h
+
+1656615292 d:\programming\projects (portfolio)\2022.06.11 (table-sorter)\settingsscreen.h
 

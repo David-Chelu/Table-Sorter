@@ -33,6 +33,7 @@ void MainScreen::Display()
         outputMainScreen += element + '\n';
     }
 
+    ChangeTextColor(Settings::Color::idle);
     SetConsoleCursor(0, 0);
     std::cout << outputMainScreen;
 

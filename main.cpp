@@ -25,13 +25,13 @@ int main()
 {
     Table
         table;
+
     MainScreen
         mainScreen;
 
-/*
     SettingsScreen
         settingsScreen;
-*/
+
     File
         file;
 
@@ -46,20 +46,24 @@ int main()
     mainScreen.AddLine("Settings");
     mainScreen.AddLine("Exit");
 
-    LoadSettings();
+//    LoadSettings();
 
-//    LoadSettings("sad");
-//    SaveSettings();
+    LoadSettings("sad");
+    SaveSettings();
+
+    ResetScreen();
 
     table.startDisplay.Y = Default::consoleBufferInfo.dwCursorPosition.Y;
 
     bool
         updateRequired = true,
         pressing[256],
-        pressed[256];
+        pressed[256],
+        reassignMode = false;
 
     char
-        screen = TABLE;
+        screen = MAIN,
+        valueSegment = 1;
 
     ZeroMemory(pressing, sizeof(pressing) / sizeof(pressing[0]));
     ZeroMemory(pressed,  sizeof(pressed)  / sizeof(pressed [0]));
@@ -75,6 +79,10 @@ int main()
             else if (screen == MAIN)
             {
                 mainScreen.Display();
+            }
+            else if (screen == SETTINGS)
+            {
+                settingsScreen.Display();
             }
 
             updateRequired = false;
@@ -166,6 +174,14 @@ int main()
                     updateRequired = true;
                 }
             }
+            else if (screen == SETTINGS)
+            {
+                if (settingsScreen.selectedLine > 0)
+                {
+                    settingsScreen.selectedLine--;
+                    updateRequired = true;
+                }
+            }
         }
 
         if (!pressed[Settings::Key::moveSelectionDown] && pressing[Settings::Key::moveSelectionDown])
@@ -183,6 +199,14 @@ int main()
                 if (mainScreen.selectedLine < mainScreen.lines.size() - 1)
                 {
                     mainScreen.selectedLine++;
+                    updateRequired = true;
+                }
+            }
+            else if (screen == SETTINGS)
+            {
+                if (settingsScreen.selectedLine < settingsScreen.optionLine.size() - 1)
+                {
+                    settingsScreen.selectedLine++;
                     updateRequired = true;
                 }
             }
@@ -256,6 +280,7 @@ int main()
 
                 screen = MAIN;
                 updateRequired = true;
+                reassignMode = false;
             }
         }
 
@@ -277,6 +302,11 @@ int main()
                 }
                 else if (!mainScreen.lines[mainScreen.selectedLine].compare("Settings"))
                 {
+                    ChangeTextColor(Settings::Color::idle);
+                    ResetScreen();
+
+                    screen = SETTINGS;
+                    updateRequired = true;
                 }
                 else if (!mainScreen.lines[mainScreen.selectedLine].compare("Exit"))
                 {
@@ -285,7 +315,195 @@ int main()
             }
             else if (screen == SETTINGS)
             {
+                ChangeTextColor(Settings::Color::idle);
+                ResetScreen();
+
+                reassignMode = false;
+                updateRequired = true;
+
+                SaveSettings();
+            }
+        }
+
+        if (!pressed[Settings::Key::reassignValue] && pressing[Settings::Key::reassignValue])
+        {
+            if (screen == TABLE)
+            {
                 // need to code it
+            }
+            else if (screen == MAIN)
+            {
+                // need to code it
+            }
+            else if (screen == SETTINGS)
+            {
+                reassignMode = true;
+            }
+        }
+
+        if (!pressed[Settings::Key::selectFirstPart] && pressing[Settings::Key::selectFirstPart])
+        {
+            if (screen == SETTINGS)
+            {
+                if (reassignMode == true)
+                {
+                    valueSegment = 1;
+                }
+            }
+        }
+
+        if (!pressed[Settings::Key::selectSecondPart] && pressing[Settings::Key::selectSecondPart])
+        {
+            if (screen == SETTINGS)
+            {
+                if (reassignMode == true)
+                {
+                    valueSegment = 2;
+                }
+            }
+        }
+
+        if (!pressed[Settings::Key::increaseAttribute] && pressing[Settings::Key::increaseAttribute])
+        {
+            if (screen == SETTINGS)
+            {
+                if (reassignMode == true)
+                {
+                    switch (settingsScreen.selectedLine)
+                    {
+                        case 0:
+                        {
+                            if (valueSegment == 1)
+                            {
+                                if (Settings::Color::idle < 0b11110000)
+                                {
+                                    Settings::Color::idle += (1 << 4);
+                                }
+                            }
+                            else if (valueSegment == 2)
+                            {
+                                if (Settings::Color::idle % (1 << 4) < 0b1111)
+                                {
+                                    Settings::Color::idle++;
+                                }
+                            }
+
+                            break;
+                        }
+                        case 1:
+                        {
+                            if (valueSegment == 1)
+                            {
+                                if (Settings::Color::line < 0b11110000)
+                                {
+                                    Settings::Color::line += (1 << 4);
+                                }
+                            }
+                            else if (valueSegment == 2)
+                            {
+                                if (Settings::Color::line % (1 << 4) < 0b1111)
+                                {
+                                    Settings::Color::line++;
+                                }
+                            }
+
+                            break;
+                        }
+                        case 2:
+                        {
+                            if (valueSegment == 1)
+                            {
+                                if (Settings::Color::word < 0b11110000)
+                                {
+                                    Settings::Color::word += (1 << 4);
+                                }
+                            }
+                            else if (valueSegment == 2)
+                            {
+                                if (Settings::Color::word % (1 << 4) < 0b1111)
+                                {
+                                    Settings::Color::word++;
+                                }
+                            }
+
+                            break;
+                        }
+                    }
+
+                    updateRequired = true;
+                }
+            }
+        }
+
+        if (!pressed[Settings::Key::decreaseAttribute] && pressing[Settings::Key::decreaseAttribute])
+        {
+            if (screen == SETTINGS)
+            {
+                if (reassignMode == true)
+                {
+                    switch (settingsScreen.selectedLine)
+                    {
+                        case 0:
+                        {
+                            if (valueSegment == 1)
+                            {
+                                if (Settings::Color::idle >= (1 << 4))
+                                {
+                                    Settings::Color::idle -= (1 << 4);
+                                }
+                            }
+                            else if (valueSegment == 2)
+                            {
+                                if (Settings::Color::idle % (1 << 4) > 0)
+                                {
+                                    Settings::Color::idle--;
+                                }
+                            }
+
+                            break;
+                        }
+                        case 1:
+                        {
+                            if (valueSegment == 1)
+                            {
+                                if (Settings::Color::line >= (1 << 4))
+                                {
+                                    Settings::Color::line -= (1 << 4);
+                                }
+                            }
+                            else if (valueSegment == 2)
+                            {
+                                if (Settings::Color::line % (1 << 4) > 0)
+                                {
+                                    Settings::Color::line--;
+                                }
+                            }
+
+                            break;
+                        }
+                        case 2:
+                        {
+                            if (valueSegment == 1)
+                            {
+                                if (Settings::Color::word >= (1 << 4))
+                                {
+                                    Settings::Color::word -= (1 << 4);
+                                }
+                            }
+                            else if (valueSegment == 2)
+                            {
+                                if (Settings::Color::word % (1 << 4) > 0)
+                                {
+                                    Settings::Color::word--;
+                                }
+                            }
+
+                            break;
+                        }
+                    }
+
+                    updateRequired = true;
+                }
             }
         }
 
