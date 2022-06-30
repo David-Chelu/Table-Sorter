@@ -1,7 +1,8 @@
 #define _WIN32_WINNT 0x0500
 
-#define OPTIONS 0
-#define TABLE   1
+#define SETTINGS 0
+#define TABLE    1
+#define MAIN     2
 
 #include <iostream>
 #include <fstream>
@@ -54,15 +55,20 @@ int main()
     {
         if (updateRequired)
         {
-            if (screen == OPTIONS)
+            if (screen == TABLE)
             {
-            }
-            else
-            {
+                ResetScreen();
                 table.Display();
             }
+            else if (screen == MAIN)
+            {
+                ResetScreen();
+            }
+
             updateRequired = false;
         }
+
+
 
         CopyMemory(pressed, pressing, sizeof(pressing) / sizeof(pressing[0]));
 
@@ -78,94 +84,148 @@ int main()
             }
         }
 
+
+
         if (!pressed[Settings::Key::customSortAscending] && pressing[Settings::Key::customSortAscending])
         {
-            if (table.CustomSort(ASCENDING))
+
+            if (screen == TABLE)
             {
-                updateRequired = true;
+                if (table.CustomSort(ASCENDING))
+                {
+                    updateRequired = true;
+                }
             }
         }
 
         if (!pressed[Settings::Key::customSortDescending] && pressing[Settings::Key::customSortDescending])
         {
-            if (table.CustomSort(DESCENDING))
+
+            if (screen == TABLE)
             {
-                updateRequired = true;
+                if (table.CustomSort(DESCENDING))
+                {
+                    updateRequired = true;
+                }
             }
         }
 
         if (!pressed[Settings::Key::sortAscending] && pressing[Settings::Key::sortAscending])
         {
-            if (table.selection.Y == -1)
+
+            if (screen == TABLE)
             {
-                if (table.Sort(ASCENDING))
+                if (table.selection.Y == -1)
                 {
-                    updateRequired = true;
+                    if (table.Sort(ASCENDING))
+                    {
+                        updateRequired = true;
+                    }
                 }
             }
         }
 
         if (!pressed[Settings::Key::sortDescending] && pressing[Settings::Key::sortDescending])
         {
-            if (table.selection.Y == -1)
+
+            if (screen == TABLE)
             {
-                if (table.Sort(DESCENDING))
+                if (table.selection.Y == -1)
                 {
-                    updateRequired = true;
+                    if (table.Sort(DESCENDING))
+                    {
+                        updateRequired = true;
+                    }
                 }
             }
         }
 
         if (!pressed[Settings::Key::moveSelectionUp] && pressing[Settings::Key::moveSelectionUp])
         {
-            if (table.selection.Y > -1)
+
+            if (screen == TABLE)
             {
-                table.selection.Y--;
-                updateRequired = true;
+                if (table.selection.Y > -1)
+                {
+                    table.selection.Y--;
+                    updateRequired = true;
+                }
             }
         }
 
         if (!pressed[Settings::Key::moveSelectionDown] && pressing[Settings::Key::moveSelectionDown])
         {
-            if (table.selection.Y < int(table.lines.size() - 1))
+
+            if (screen == TABLE)
             {
-                table.selection.Y++;
-                updateRequired = true;
+                if (table.selection.Y < int(table.lines.size() - 1))
+                {
+                    table.selection.Y++;
+                    updateRequired = true;
+                }
             }
         }
 
         if (!pressed[Settings::Key::moveSelectionLeft] && pressing[Settings::Key::moveSelectionLeft])
         {
-            if (table.selection.X > 0)
+
+            if (screen == TABLE)
             {
-                table.selection.X--;
-                updateRequired = true;
+                if (table.selection.X > 0)
+                {
+                    table.selection.X--;
+                    updateRequired = true;
+                }
             }
         }
 
         if (!pressed[Settings::Key::moveSelectionRight] && pressing[Settings::Key::moveSelectionRight])
         {
-            if (table.selection.X < int(table.columnWidth.size() - 1))
+
+            if (screen == TABLE)
             {
-                table.selection.X++;
-                updateRequired = true;
+                if (table.selection.X < int(table.columnWidth.size() - 1))
+                {
+                    table.selection.X++;
+                    updateRequired = true;
+                }
             }
         }
 
         if (!pressed[Settings::Key::shrinkColumn] && pressing[Settings::Key::shrinkColumn])
         {
-            if (table.columnWidth[table.selection.X] > 2)
+
+            if (screen == TABLE)
             {
-                table.columnWidth[table.selection.X]--;
-                updateRequired = true;
+                if (table.columnWidth[table.selection.X] > 2)
+                {
+                    table.columnWidth[table.selection.X]--;
+                    updateRequired = true;
+                }
             }
         }
         else if (!pressed[Settings::Key::expandColumn] && pressing[Settings::Key::expandColumn])
         {
-            if (table.columnWidth[table.selection.X] < 39)
+            if (screen == TABLE)
             {
-                table.columnWidth[table.selection.X]++;
+                if (table.columnWidth[table.selection.X] < 39)
+                {
+                    table.columnWidth[table.selection.X]++;
+                    updateRequired = true;
+                }
+            }
+        }
+
+        if (!pressed[Settings::Key::exit] && pressing[Settings::Key::exit])
+        {
+            if (screen == TABLE)
+            {
+                screen = MAIN;
                 updateRequired = true;
+            }
+            else if (screen == MAIN)
+            {
+                break;
             }
         }
 
@@ -173,10 +233,6 @@ int main()
     }
 
 
-
-    std::cout << "\n\nPress any key to end the program.";
-
-    getch();
 
     return 0;
 }

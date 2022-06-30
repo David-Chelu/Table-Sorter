@@ -24,6 +24,9 @@ namespace Default
     std::string
         settingsDirectory = "settings.tsr";
 
+    int unsigned
+        linesDrawn;
+
     namespace Color
     {
         WORD
@@ -44,7 +47,8 @@ namespace Default
             moveSelectionUp      = VK_UP,
             moveSelectionDown    = VK_DOWN,
             moveSelectionLeft    = VK_LEFT,
-            moveSelectionRight   = VK_RIGHT;
+            moveSelectionRight   = VK_RIGHT,
+            exit                 = VK_ESCAPE;
     }
 }
 
@@ -70,7 +74,8 @@ namespace Settings
             moveSelectionUp,
             moveSelectionDown,
             moveSelectionLeft,
-            moveSelectionRight;
+            moveSelectionRight,
+            exit;
     }
 }
 

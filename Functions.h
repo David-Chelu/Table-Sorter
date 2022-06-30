@@ -106,6 +106,14 @@ std::string StripString(const std::string &target)
     return target.substr(start, stop - start + 1);
 }
 
+void ResetScreen()
+{
+    std::cout << std::string(Default::consoleBufferInfo.dwSize.X * Default::consoleBufferInfo.dwSize.Y,
+                             ' ');
+
+    SetConsoleCursor();
+}
+
 bool LoadSettings(const std::string &directory)
 {
     bool
@@ -132,6 +140,7 @@ bool LoadSettings(const std::string &directory)
         loadFile.read((char*)&Settings::Key::moveSelectionDown,    sizeof(Settings::Key::moveSelectionDown));
         loadFile.read((char*)&Settings::Key::moveSelectionLeft,    sizeof(Settings::Key::moveSelectionLeft));
         loadFile.read((char*)&Settings::Key::moveSelectionRight,   sizeof(Settings::Key::moveSelectionRight));
+        loadFile.read((char*)&Settings::Key::exit,                 sizeof(Settings::Key::exit));
 
         loadFile.close();
     }
@@ -151,6 +160,7 @@ bool LoadSettings(const std::string &directory)
         Settings::Key::moveSelectionDown    = Default::Key::moveSelectionDown;
         Settings::Key::moveSelectionLeft    = Default::Key::moveSelectionLeft;
         Settings::Key::moveSelectionRight   = Default::Key::moveSelectionRight;
+        Settings::Key::exit                 = Default::Key::exit;
 
         result = false;
     }
@@ -160,11 +170,6 @@ bool LoadSettings(const std::string &directory)
 
     SetConsoleTextAttribute(Default::consoleOutputHandle,
                             Settings::Color::idle);
-
-    std::cout << std::string(Default::consoleBufferInfo.dwSize.X * Default::consoleBufferInfo.dwSize.Y,
-                             ' ');
-
-    SetConsoleCursor();
 
     return result;
 }
@@ -197,6 +202,7 @@ bool SaveSettings(const std::string &directory)
         saveFile.write((char*)&Settings::Key::moveSelectionDown,    sizeof(Settings::Key::moveSelectionDown));
         saveFile.write((char*)&Settings::Key::moveSelectionLeft,    sizeof(Settings::Key::moveSelectionLeft));
         saveFile.write((char*)&Settings::Key::moveSelectionRight,   sizeof(Settings::Key::moveSelectionRight));
+        saveFile.write((char*)&Settings::Key::exit,                 sizeof(Settings::Key::exit));
 
         saveFile.close();
     }
