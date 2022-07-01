@@ -46,10 +46,10 @@ int main()
     mainScreen.AddLine("Settings");
     mainScreen.AddLine("Exit");
 
-//    LoadSettings();
+    LoadSettings();
 
-    LoadSettings("sad");
-    SaveSettings();
+//    LoadSettings("sad");
+//    SaveSettings();
 
     ResetScreen();
 
