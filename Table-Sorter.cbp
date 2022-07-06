@@ -23,6 +23,7 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="CellCharacterInput.h" />
 		<Unit filename="Classes.h" />
 		<Unit filename="CustomSort.h" />
 		<Unit filename="Entry.h" />

@@ -8,6 +8,11 @@ struct Entry
     Entry
         &operator =(const Entry &targetEntry);
 
+    std::string
+        &operator [](int unsigned index);
+
+
+
     void
         DisplayValues();
 
@@ -28,6 +33,13 @@ Entry &Entry::operator =(const Entry &targetEntry)
 
     return *this;
 }
+
+std::string &Entry::operator [](int unsigned index)
+{
+    return this->column[index];
+}
+
+
 
 void Entry::DisplayValues()
 {

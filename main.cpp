@@ -18,11 +18,22 @@
 #include "Classes.h"
 
 #include "CustomSort.h"
+#include "CellCharacterInput.h"
 
 
 
 int main()
 {
+    bool
+        updateRequired = true,
+        pressing[256],
+        pressed[256],
+        reassignMode = false;
+
+    char
+        screen = MAIN,
+        valueSegment = 1;
+
     Table
         table;
 
@@ -35,6 +46,19 @@ int main()
     File
         file;
 
+    std::vector <std::string>
+        menuLines{"Table View",
+                  "Settings",
+                  "Exit"};
+
+    std::vector <int>
+        cellAlphabeticCharacters = CellAlphabeticInput(),
+        cellNumericCharacters = CellNumericInput(),
+        cellNumpadNumericCharacters = CellNumpadNumericInput();
+
+    WORD
+        previousIdleColor = Settings::Color::idle;
+
 
 
     table.format.ID = -1;
@@ -42,9 +66,10 @@ int main()
     table.ReadData(file);
     table.CalculateColumnWidths();
 
-    mainScreen.AddLine("Table View");
-    mainScreen.AddLine("Settings");
-    mainScreen.AddLine("Exit");
+    for (auto element : menuLines)
+    {
+        mainScreen.AddLine(element);
+    }
 
     LoadSettings();
 
@@ -55,18 +80,10 @@ int main()
 
     table.startDisplay.Y = Default::consoleBufferInfo.dwCursorPosition.Y;
 
-    bool
-        updateRequired = true,
-        pressing[256],
-        pressed[256],
-        reassignMode = false;
-
-    char
-        screen = MAIN,
-        valueSegment = 1;
-
     ZeroMemory(pressing, sizeof(pressing) / sizeof(pressing[0]));
     ZeroMemory(pressed,  sizeof(pressed)  / sizeof(pressed [0]));
+
+
 
     while (1)
     {
@@ -247,7 +264,8 @@ int main()
                 }
             }
         }
-        else if (!pressed[Settings::Key::expandColumn] && pressing[Settings::Key::expandColumn])
+
+        if (!pressed[Settings::Key::expandColumn] && pressing[Settings::Key::expandColumn])
         {
             if (screen == TABLE)
             {
@@ -263,11 +281,13 @@ int main()
         {
             if (screen == TABLE)
             {
+                // only the number of lines
                 ChangeTextColor(Settings::Color::idle);
                 ResetScreen();
 
                 screen = MAIN;
                 updateRequired = true;
+                reassignMode = false;
             }
             else if (screen == MAIN)
             {
@@ -275,6 +295,7 @@ int main()
             }
             else if (screen == SETTINGS)
             {
+                // only the number of lines
                 ChangeTextColor(Settings::Color::idle);
                 ResetScreen();
 
@@ -288,35 +309,51 @@ int main()
         {
             if (screen == TABLE)
             {
-                // need to code it
+                reassignMode = false;
+
+                // if no changes to entry's column
+                table.WriteData(file);
             }
             else if (screen == MAIN)
             {
-                if (!mainScreen.lines[mainScreen.selectedLine].compare("Table View"))
+                if (!mainScreen.lines[mainScreen.selectedLine].compare(menuLines[0]))
                 {
+                    // only the number of lines
                     ChangeTextColor(Settings::Color::idle);
                     ResetScreen();
 
                     screen = TABLE;
                     updateRequired = true;
                 }
-                else if (!mainScreen.lines[mainScreen.selectedLine].compare("Settings"))
+                else if (!mainScreen.lines[mainScreen.selectedLine].compare(menuLines[1]))
                 {
+                    // only the number of lines
                     ChangeTextColor(Settings::Color::idle);
                     ResetScreen();
 
                     screen = SETTINGS;
                     updateRequired = true;
                 }
-                else if (!mainScreen.lines[mainScreen.selectedLine].compare("Exit"))
+                else if (!mainScreen.lines[mainScreen.selectedLine].compare(menuLines[2]))
                 {
                     break;
                 }
             }
             else if (screen == SETTINGS)
             {
-                ChangeTextColor(Settings::Color::idle);
-                ResetScreen();
+                if (previousIdleColor == Settings::Color::idle)
+                {
+                    // if idle changed; else, reset only the number of lines
+                    ChangeTextColor(Settings::Color::idle);
+                    ResetScreen();
+                }
+                else
+                {
+                    ChangeTextColor(Settings::Color::idle);
+                    ResetScreen();
+
+                    previousIdleColor = Settings::Color::idle;
+                }
 
                 reassignMode = false;
                 updateRequired = true;
@@ -329,11 +366,7 @@ int main()
         {
             if (screen == TABLE)
             {
-                // need to code it
-            }
-            else if (screen == MAIN)
-            {
-                // need to code it
+                reassignMode = true;
             }
             else if (screen == SETTINGS)
             {
@@ -506,6 +539,45 @@ int main()
                 }
             }
         }
+
+
+
+        if (reassignMode)
+        {
+            if (screen == TABLE)
+            {
+                for (auto element : cellAlphabeticCharacters)
+                {
+                    if (!pressed[element] && pressing[element])
+                    {
+                        // append characters to cell
+                    }
+                }
+
+                for (auto element : cellNumericCharacters)
+                {
+                    if (!pressed[element] && pressing[element])
+                    {
+                        // append characters to cell
+                    }
+                }
+
+                for (auto element : cellNumpadNumericCharacters)
+                {
+                    if (!pressed[element] && pressing[element])
+                    {
+                        // append characters to cell
+                    }
+                }
+
+                if (!pressed[' '] && pressing[' '])
+                {
+                    // append characters to cell
+                }
+            }
+        }
+
+
 
         Sleep(1);
     }

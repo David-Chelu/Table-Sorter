@@ -7,6 +7,13 @@ struct Table
 {
     Table();
 
+
+
+    Entry
+        &operator [](int unsigned index);
+
+
+
     bool
         Sort(int mode = ASCENDING),
         CustomSort(int mode = ASCENDING);
@@ -75,6 +82,15 @@ Table::Table()
 
     this->bufferSize = ReadBufferSizeFromWindow();
 }
+
+
+
+Entry &Table::operator [](int unsigned index)
+{
+    return this->lines[index];
+}
+
+
 
 bool Table::Sort(int mode)
 {
