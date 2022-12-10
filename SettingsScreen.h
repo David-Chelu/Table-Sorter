@@ -10,6 +10,9 @@ struct SettingsScreen
     uint16_t
         Display();
 
+    bool
+        reassignMode;
+
     int unsigned
         selectedLine;
 

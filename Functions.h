@@ -156,6 +156,7 @@ bool LoadSettings(const std::string &directory)
         loadFile.read((char*)&Settings::Key::decreaseAttribute,    sizeof(Settings::Key::decreaseAttribute));
         loadFile.read((char*)&Settings::Key::selectFirstPart,      sizeof(Settings::Key::selectFirstPart));
         loadFile.read((char*)&Settings::Key::selectSecondPart,     sizeof(Settings::Key::selectSecondPart));
+        loadFile.read((char*)&Settings::Key::deleteLastCharacter,  sizeof(Settings::Key::deleteLastCharacter));
 
         loadFile.close();
     }
@@ -182,6 +183,7 @@ bool LoadSettings(const std::string &directory)
         Settings::Key::decreaseAttribute    = Default::Key::decreaseAttribute;
         Settings::Key::selectFirstPart      = Default::Key::selectFirstPart;
         Settings::Key::selectSecondPart     = Default::Key::selectSecondPart;
+        Settings::Key::deleteLastCharacter  = Default::Key::deleteLastCharacter;
 
         result = false;
     }
@@ -227,6 +229,7 @@ bool SaveSettings(const std::string &directory)
         saveFile.write((char*)&Settings::Key::decreaseAttribute,    sizeof(Settings::Key::decreaseAttribute));
         saveFile.write((char*)&Settings::Key::selectFirstPart,      sizeof(Settings::Key::selectFirstPart));
         saveFile.write((char*)&Settings::Key::selectSecondPart,     sizeof(Settings::Key::selectSecondPart));
+        saveFile.write((char*)&Settings::Key::deleteLastCharacter,  sizeof(Settings::Key::deleteLastCharacter));
 
         saveFile.close();
     }

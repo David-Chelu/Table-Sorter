@@ -28,16 +28,16 @@ int main()
         updateRequired = true,
         pressing[256],
         pressed[256],
-        reassignMode = false;
+        tableModified = false;
 
     char
         screen = MAIN,
         valueSegment = 1;
 
     uint16_t
-        printedTableLines,
-        printedSettingsLines,
-        printedMainLines;
+        printedTableLines = 0,
+        printedSettingsLines = 0,
+        printedMainLines = 0;
 
     Table
         table;
@@ -66,6 +66,9 @@ int main()
 
 
 
+    settingsScreen.reassignMode = false;
+
+    table.reassignMode = false;
     table.format.ID = -1;
     table.ReadFormat(file);
     table.ReadData(file);
@@ -78,7 +81,7 @@ int main()
 
     LoadSettings();
 
-//    LoadSettings("sad");
+//    LoadSettings("asd");
 //    SaveSettings();
 
     ResetScreen();
@@ -288,11 +291,19 @@ int main()
         {
             if (screen == TABLE)
             {
-                ResetScreen(printedTableLines);
+                if (true == table.reassignMode)
+                {
+                    updateRequired = true;
+                }
+                else
+                {
+                    ResetScreen(printedTableLines);
 
-                screen = MAIN;
-                updateRequired = true;
-                reassignMode = false;
+                    screen = MAIN;
+                    updateRequired = true;
+                }
+
+                table.reassignMode = false;
             }
             else if (screen == MAIN)
             {
@@ -304,7 +315,7 @@ int main()
 
                 screen = MAIN;
                 updateRequired = true;
-                reassignMode = false;
+                settingsScreen.reassignMode = false;
             }
         }
 
@@ -312,10 +323,23 @@ int main()
         {
             if (screen == TABLE)
             {
-                reassignMode = false;
+                if (true == table.reassignMode)
+                {
+                    (-1 == table.selection.Y?
+                         table.format :
+                         table.lines[table.selection.Y]).column[table.selection.X] = table.cellText;
 
-                // if no changes to entry's column
-                table.WriteData(file);
+                    table.reassignMode = false;
+                }
+                else
+                {
+                    if (true == tableModified)
+                    {
+                        table.WriteFormat(file);
+                        table.WriteData(file);
+                        tableModified = false;
+                    }
+                }
             }
             else if (screen == MAIN)
             {
@@ -351,7 +375,7 @@ int main()
                     previousIdleColor = Settings::Color::idle;
                 }
 
-                reassignMode = false;
+                settingsScreen.reassignMode = false;
                 updateRequired = true;
 
                 SaveSettings();
@@ -362,11 +386,16 @@ int main()
         {
             if (screen == TABLE)
             {
-                reassignMode = true;
+                if (false == table.reassignMode)
+                {
+                    table.cellText = (-1 == table.selection.Y? table.format : table.lines[table.selection.Y]).column[table.selection.X];
+                }
+
+                table.reassignMode = true;
             }
             else if (screen == SETTINGS)
             {
-                reassignMode = true;
+                settingsScreen.reassignMode = true;
             }
         }
 
@@ -374,7 +403,7 @@ int main()
         {
             if (screen == SETTINGS)
             {
-                if (reassignMode == true)
+                if (settingsScreen.reassignMode == true)
                 {
                     valueSegment = 1;
                 }
@@ -385,7 +414,7 @@ int main()
         {
             if (screen == SETTINGS)
             {
-                if (reassignMode == true)
+                if (settingsScreen.reassignMode == true)
                 {
                     valueSegment = 2;
                 }
@@ -396,7 +425,7 @@ int main()
         {
             if (screen == SETTINGS)
             {
-                if (reassignMode == true)
+                if (settingsScreen.reassignMode == true)
                 {
                     switch (settingsScreen.selectedLine)
                     {
@@ -468,7 +497,7 @@ int main()
         {
             if (screen == SETTINGS)
             {
-                if (reassignMode == true)
+                if (settingsScreen.reassignMode == true)
                 {
                     switch (settingsScreen.selectedLine)
                     {
@@ -538,7 +567,7 @@ int main()
 
 
 
-        if (reassignMode)
+        if (table.reassignMode)
         {
             if (screen == TABLE)
             {
@@ -546,7 +575,10 @@ int main()
                 {
                     if (!pressed[element] && pressing[element])
                     {
-                        // append characters to cell
+                        table.cellText.push_back(char(element + (pressing[VK_SHIFT] || pressing[VK_RSHIFT]? 0 : 32)));
+
+                        tableModified = true;
+                        updateRequired = true;
                     }
                 }
 
@@ -554,7 +586,10 @@ int main()
                 {
                     if (!pressed[element] && pressing[element])
                     {
-                        // append characters to cell
+                        table.cellText.push_back(char(element));
+
+                        tableModified = true;
+                        updateRequired = true;
                     }
                 }
 
@@ -562,13 +597,28 @@ int main()
                 {
                     if (!pressed[element] && pressing[element])
                     {
-                        // append characters to cell
+                        table.cellText.push_back(char(element - 48));
+
+                        tableModified = true;
+                        updateRequired = true;
                     }
                 }
 
                 if (!pressed[' '] && pressing[' '])
                 {
-                    // append characters to cell
+                    table.cellText.push_back(' ');
+
+                    tableModified = true;
+                    updateRequired = true;
+                }
+
+                if (!pressed[Settings::Key::deleteLastCharacter] &&
+                    pressing[Settings::Key::deleteLastCharacter])
+                {
+                    table.cellText.pop_back();
+
+                    tableModified = true;
+                    updateRequired = true;
                 }
             }
         }
@@ -582,3 +632,32 @@ int main()
 
     return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

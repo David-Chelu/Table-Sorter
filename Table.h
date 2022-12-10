@@ -34,7 +34,8 @@ struct Table
 
     bool
         modifiedFormat,
-        modifiedLines;
+        modifiedLines,
+        reassignMode;
 
     char
         horizontalWall,
@@ -55,6 +56,9 @@ struct Table
 
     std::pair <int, int>
         bufferSize;
+
+    std::string
+        cellText;
 
     std::vector <Entry>
         lines,
@@ -286,7 +290,7 @@ uint16_t Table::Display()
 
     ChangeTextColor(Settings::Color::word);
     SetConsoleCursor(this->word.X, this->word.Y);
-    std::cout << coloredLine.substr(this->word.X, this->wordWidth);
+    std::cout << (this->reassignMode? AllocateAndCompensate(cellText, this->wordWidth) : coloredLine.substr(this->word.X, this->wordWidth));
 
     ChangeTextColor(Settings::Color::idle);
 

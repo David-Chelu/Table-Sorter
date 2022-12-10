@@ -50,11 +50,12 @@ namespace Default
             moveSelectionRight   = VK_RIGHT,
             exit                 = VK_ESCAPE,
             open                 = VK_RETURN,
-            reassignValue        = VK_SPACE,
+            reassignValue        = VK_TAB,
             increaseAttribute    = VK_ADD,
             decreaseAttribute    = VK_SUBTRACT,
             selectFirstPart      = VK_NUMPAD1,
-            selectSecondPart     = VK_NUMPAD2;
+            selectSecondPart     = VK_NUMPAD2,
+            deleteLastCharacter  = VK_BACK;
     }
 }
 
@@ -87,7 +88,8 @@ namespace Settings
             increaseAttribute,
             decreaseAttribute,
             selectFirstPart,
-            selectSecondPart;
+            selectSecondPart,
+            deleteLastCharacter;
     }
 }
 
