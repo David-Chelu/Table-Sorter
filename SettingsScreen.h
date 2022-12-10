@@ -7,7 +7,7 @@ struct SettingsScreen
 {
     SettingsScreen();
 
-    void
+    uint16_t
         Display();
 
     int unsigned
@@ -63,8 +63,11 @@ SettingsScreen::SettingsScreen()
     this->optionLine.push_back(17);*/
 }
 
-void SettingsScreen::Display()
+uint16_t SettingsScreen::Display()
 {
+    uint16_t
+        cursorY;
+
     std::string
         outputMainScreen;
 
@@ -76,6 +79,9 @@ void SettingsScreen::Display()
     ChangeTextColor(Settings::Color::idle);
     SetConsoleCursor(0, 0);
     std::cout << outputMainScreen;
+
+    ReadBufferSizeFromWindow();
+    cursorY = Default::consoleBufferInfo.dwCursorPosition.Y;
 
     switch (this->selectedLine)
     {
@@ -105,6 +111,10 @@ void SettingsScreen::Display()
     std::cout << this->lines[this->optionLine[this->selectedLine]];
 
     ChangeTextColor(Settings::Color::idle);
+
+
+
+    return cursorY;
 }
 
 

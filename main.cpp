@@ -34,6 +34,11 @@ int main()
         screen = MAIN,
         valueSegment = 1;
 
+    uint16_t
+        printedTableLines,
+        printedSettingsLines,
+        printedMainLines;
+
     Table
         table;
 
@@ -57,7 +62,7 @@ int main()
         cellNumpadNumericCharacters = CellNumpadNumericInput();
 
     WORD
-        previousIdleColor = Settings::Color::idle;
+        previousIdleColor;
 
 
 
@@ -78,6 +83,8 @@ int main()
 
     ResetScreen();
 
+    previousIdleColor = Settings::Color::idle;
+
     table.startDisplay.Y = Default::consoleBufferInfo.dwCursorPosition.Y;
 
     ZeroMemory(pressing, sizeof(pressing) / sizeof(pressing[0]));
@@ -91,15 +98,15 @@ int main()
         {
             if (screen == TABLE)
             {
-                table.Display();
+                printedTableLines = table.Display();
             }
             else if (screen == MAIN)
             {
-                mainScreen.Display();
+                printedMainLines = mainScreen.Display();
             }
             else if (screen == SETTINGS)
             {
-                settingsScreen.Display();
+                printedSettingsLines = settingsScreen.Display();
             }
 
             updateRequired = false;
@@ -281,9 +288,7 @@ int main()
         {
             if (screen == TABLE)
             {
-                // only the number of lines
-                ChangeTextColor(Settings::Color::idle);
-                ResetScreen();
+                ResetScreen(printedTableLines);
 
                 screen = MAIN;
                 updateRequired = true;
@@ -295,9 +300,7 @@ int main()
             }
             else if (screen == SETTINGS)
             {
-                // only the number of lines
-                ChangeTextColor(Settings::Color::idle);
-                ResetScreen();
+                ResetScreen(printedSettingsLines);
 
                 screen = MAIN;
                 updateRequired = true;
@@ -318,18 +321,14 @@ int main()
             {
                 if (!mainScreen.lines[mainScreen.selectedLine].compare(menuLines[0]))
                 {
-                    // only the number of lines
-                    ChangeTextColor(Settings::Color::idle);
-                    ResetScreen();
+                    ResetScreen(printedMainLines);
 
                     screen = TABLE;
                     updateRequired = true;
                 }
                 else if (!mainScreen.lines[mainScreen.selectedLine].compare(menuLines[1]))
                 {
-                    // only the number of lines
-                    ChangeTextColor(Settings::Color::idle);
-                    ResetScreen();
+                    ResetScreen(printedMainLines);
 
                     screen = SETTINGS;
                     updateRequired = true;
@@ -343,13 +342,10 @@ int main()
             {
                 if (previousIdleColor == Settings::Color::idle)
                 {
-                    // if idle changed; else, reset only the number of lines
-                    ChangeTextColor(Settings::Color::idle);
-                    ResetScreen();
+                    ResetScreen(printedSettingsLines);
                 }
                 else
                 {
-                    ChangeTextColor(Settings::Color::idle);
                     ResetScreen();
 
                     previousIdleColor = Settings::Color::idle;

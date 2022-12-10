@@ -1,3 +1,3 @@
-Project_Borealis 1 15.37 very_hard
 Half-Life_2_Classic 3.76 11.82 hard
+Project_Borealis 1 15.37 very_hard
 Sven_Co-op 0.39 0.93 easy

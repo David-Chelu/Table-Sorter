@@ -18,9 +18,11 @@ struct Table
         Sort(int mode = ASCENDING),
         CustomSort(int mode = ASCENDING);
 
+    uint16_t
+        Display();
+
     void
         CalculateColumnWidths(),
-        Display(),
         DisplayValues(),
         FillLine(std::string &outputLine, int short unsigned lineSize),
         ReadFormat(File &file),
@@ -183,7 +185,7 @@ void Table::CalculateColumnWidths()
     }
 }
 
-void Table::Display()
+uint16_t Table::Display()
 {
     static int short unsigned
         lineSize;
@@ -192,6 +194,9 @@ void Table::Display()
         coloredLine,
         outputLine,
         outputTable;
+
+    uint16_t
+        cursorY;
 
     coloredLine = "";
     outputLine  = "";
@@ -272,6 +277,9 @@ void Table::Display()
                      this->startDisplay.Y);
     std::cout << outputTable;
 
+    ReadBufferSizeFromWindow();
+    cursorY = Default::consoleBufferInfo.dwCursorPosition.Y;
+
     ChangeTextColor(Settings::Color::line);
     SetConsoleCursor(0, this->word.Y);
     std::cout << coloredLine.substr(0, lineSize);
@@ -281,6 +289,10 @@ void Table::Display()
     std::cout << coloredLine.substr(this->word.X, this->wordWidth);
 
     ChangeTextColor(Settings::Color::idle);
+
+
+
+    return cursorY;
 }
 
 void Table::DisplayValues()

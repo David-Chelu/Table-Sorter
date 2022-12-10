@@ -112,11 +112,12 @@ void ChangeTextColor(WORD newColor)
                             newColor);
 }
 
-void ResetScreen()
+void ResetScreen(uint16_t numberOfLines = -1)
 {
+    SetConsoleCursor();
     ChangeTextColor(Settings::Color::idle);
 
-    std::cout << std::string(Default::consoleBufferInfo.dwSize.X * Default::consoleBufferInfo.dwSize.Y,
+    std::cout << std::string(Default::consoleBufferInfo.dwSize.X * std::min<uint16_t>(Default::consoleBufferInfo.dwSize.Y, numberOfLines),
                              ' ');
 
     SetConsoleCursor();

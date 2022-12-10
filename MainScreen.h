@@ -7,8 +7,10 @@ struct MainScreen
 {
     MainScreen();
 
+    uint16_t
+        Display();
+
     void
-        Display(),
         AddLine(const std::string &target);
 
     int unsigned
@@ -23,8 +25,11 @@ MainScreen::MainScreen()
     this->selectedLine = 0;
 }
 
-void MainScreen::Display()
+uint16_t MainScreen::Display()
 {
+    uint16_t
+        cursorY;
+
     std::string
         outputMainScreen;
 
@@ -37,11 +42,18 @@ void MainScreen::Display()
     SetConsoleCursor(0, 0);
     std::cout << outputMainScreen;
 
+    ReadBufferSizeFromWindow();
+    cursorY = Default::consoleBufferInfo.dwCursorPosition.Y;
+
     ChangeTextColor(Settings::Color::line);
     SetConsoleCursor(0, this->selectedLine);
     std::cout << this->lines[this->selectedLine];
 
     ChangeTextColor(Settings::Color::idle);
+
+
+
+    return cursorY;
 }
 
 void MainScreen::AddLine(const std::string &target)
